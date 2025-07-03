@@ -1,0 +1,9 @@
+*.wav
+*.zip
+*.mobi
+*.epub
+*.pdf
+*.docx
+*.log
+*.pyc
+__pycache__/

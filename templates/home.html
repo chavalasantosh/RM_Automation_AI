@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Matching Engine - AI-Powered Resume Matching{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-primary text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-4">
+                    Find the Perfect Match with AI
+                </h1>
+                <p class="lead mb-4">
+                    Our AI-powered platform helps you match resumes with job descriptions, 
+                    saving time and improving hiring decisions.
+                </p>
+                <div class="d-flex gap-3">
+                    {% if user %}
+                    <a href="/dashboard" class="btn btn-light btn-lg">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                    {% else %}
+                    <a href="/login" class="btn btn-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Get Started
+                    </a>
+                    <a href="#features" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="/static/images/hero-illustration.svg" alt="Resume Matching Illustration" 
+                     class="img-fluid" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5" id="features">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold mb-3">Why Choose Our Platform?</h2>
+        <p class="lead text-muted">
+            Powerful features to streamline your hiring process
+        </p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                        <i class="fas fa-robot fa-2x"></i>
+                    </div>
+                    <h3 class="h4 mb-3">AI-Powered Matching</h3>
+                    <p class="text-muted mb-0">
+                        Our advanced AI algorithms analyze resumes and job descriptions 
+                        to find the best matches based on skills, experience, and requirements.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                        <i class="fas fa-bolt fa-2x"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Fast Processing</h3>
+                    <p class="text-muted mb-0">
+                        Upload multiple resumes and job descriptions at once. 
+                        Our system processes them quickly and provides instant results.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Smart Analytics</h3>
+                    <p class="text-muted mb-0">
+                        Get detailed insights into match quality, skill gaps, 
+                        and candidate rankings to make informed hiring decisions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="bg-light py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+            <p class="lead text-muted">
+                Simple steps to find your perfect matches
+            </p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="step-number bg-primary text-white rounded-circle mb-3">1</div>
+                    <h3 class="h5 mb-3">Upload Documents</h3>
+                    <p class="text-muted mb-0">
+                        Upload resumes and job descriptions in PDF, DOC, or DOCX format.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="step-number bg-primary text-white rounded-circle mb-3">2</div>
+                    <h3 class="h5 mb-3">AI Analysis</h3>
+                    <p class="text-muted mb-0">
+                        Our AI analyzes documents to extract skills and requirements.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="step-number bg-primary text-white rounded-circle mb-3">3</div>
+                    <h3 class="h5 mb-3">Smart Matching</h3>
+                    <p class="text-muted mb-0">
+                        The system matches candidates with jobs based on compatibility.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="step-number bg-primary text-white rounded-circle mb-3">4</div>
+                    <h3 class="h5 mb-3">Review Results</h3>
+                    <p class="text-muted mb-0">
+                        Review matches, scores, and detailed analysis to make decisions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Hiring Process?</h2>
+            <p class="lead text-muted mb-4">
+                Join thousands of companies using our platform to find the best talent.
+            </p>
+            {% if user %}
+            <a href="/dashboard" class="btn btn-primary btn-lg">
+                <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+            </a>
+            {% else %}
+            <a href="/login" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Get Started Now
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.feature-icon {
+    width: 64px;
+    height: 64px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.bg-primary {
+    background-color: var(--bs-primary) !important;
+}
+
+.bg-gradient {
+    background-image: linear-gradient(45deg, var(--bs-primary), var(--bs-primary-dark)) !important;
+}
+</style>
+{% endblock %} 

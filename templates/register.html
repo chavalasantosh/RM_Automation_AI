@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Registration Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <div class="register-icon bg-primary bg-gradient text-white rounded-circle mx-auto mb-3">
+                            <i class="fas fa-user-plus fa-2x"></i>
+                        </div>
+                        <h1 class="h3 mb-3">Create Your Account</h1>
+                        <p class="text-muted">
+                            Join our platform to start matching resumes with job opportunities.
+                        </p>
+                    </div>
+
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Registration Form -->
+                    <form method="POST" action="{{ url_for('auth.register') }}" class="needs-validation" novalidate>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        
+                        <div class="row g-3">
+                            <!-- Personal Information -->
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" 
+                                       required minlength="2" maxlength="50">
+                                <div class="invalid-feedback">
+                                    Please enter your first name.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" 
+                                       required minlength="2" maxlength="50">
+                                <div class="invalid-feedback">
+                                    Please enter your last name.
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-envelope text-muted"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email address.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="company" class="form-label">Company/Organization</label>
+                                <input type="text" class="form-control" id="company" name="company" 
+                                       required minlength="2" maxlength="100">
+                                <div class="invalid-feedback">
+                                    Please enter your company or organization name.
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="jobTitle" class="form-label">Job Title</label>
+                                <input type="text" class="form-control" id="jobTitle" name="jobTitle" 
+                                       required minlength="2" maxlength="100">
+                                <div class="invalid-feedback">
+                                    Please enter your job title.
+                                </div>
+                            </div>
+
+                            <!-- Account Details -->
+                            <div class="col-12">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-user text-muted"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="username" name="username" 
+                                           required minlength="3" maxlength="30" 
+                                           pattern="^[a-zA-Z0-9_-]+$">
+                                    <div class="invalid-feedback">
+                                        Username must be 3-30 characters and can only contain letters, numbers, underscores, and hyphens.
+                                    </div>
+                                </div>
+                                <small class="text-muted">This will be your unique identifier on the platform.</small>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-lock text-muted"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="password" name="password" 
+                                           required minlength="8" 
+                                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$">
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <div class="invalid-feedback">
+                                        Password must be at least 8 characters long and include both letters and numbers.
+                                    </div>
+                                </div>
+                                <div class="password-strength mt-2" id="passwordStrength">
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small class="text-muted" id="strengthText">Password strength: Too weak</small>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-lock text-muted"></i>
+                                    </span>
+                                    <input type="password" class="form-control" id="confirmPassword" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Passwords do not match.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Password Requirements -->
+                            <div class="col-12">
+                                <div class="card bg-light border-0">
+                                    <div class="card-body p-3">
+                                        <h6 class="card-title mb-2">Password Requirements:</h6>
+                                        <ul class="list-unstyled mb-0 small">
+                                            <li class="mb-1" id="lengthCheck">
+                                                <i class="fas fa-times text-danger me-2"></i>
+                                                At least 8 characters long
+                                            </li>
+                                            <li class="mb-1" id="letterCheck">
+                                                <i class="fas fa-times text-danger me-2"></i>
+                                                Contains at least one letter
+                                            </li>
+                                            <li class="mb-1" id="numberCheck">
+                                                <i class="fas fa-times text-danger me-2"></i>
+                                                Contains at least one number
+                                            </li>
+                                            <li class="mb-1" id="matchCheck">
+                                                <i class="fas fa-times text-danger me-2"></i>
+                                                Passwords match
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terms and Marketing -->
+                            <div class="col-12">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                                    <label class="form-check-label" for="termsCheck">
+                                        I agree to the <a href="{{ url_for('main.terms') }}" target="_blank">Terms of Service</a> 
+                                        and <a href="{{ url_for('main.privacy') }}" target="_blank">Privacy Policy</a>
+                                    </label>
+                                    <div class="invalid-feedback">
+                                        You must agree to the terms and conditions.
+                                    </div>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="marketingCheck" name="marketing_consent">
+                                    <label class="form-check-label" for="marketingCheck">
+                                        I agree to receive marketing communications (optional)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="submitRegistration">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="text-center mt-4">
+                        <p class="mb-0">
+                            Already have an account? 
+                            <a href="{{ url_for('auth.login') }}" class="text-decoration-none">Sign in</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-shield-alt text-primary fa-2x"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="h6 mb-1">Your Data is Secure</h5>
+                            <p class="small text-muted mb-0">
+                                We use industry-standard encryption to protect your information. 
+                                Your data is never shared with third parties without your consent.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.register-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.input-group-text {
+    border-right: none;
+}
+
+.form-control:focus {
+    border-color: var(--bs-border-color);
+    box-shadow: none;
+}
+
+.form-control:focus + .input-group-text {
+    border-color: var(--bs-primary);
+}
+
+.password-strength .progress {
+    background-color: #e9ecef;
+}
+
+.password-strength .progress-bar {
+    transition: width 0.3s ease;
+}
+
+.password-strength .progress-bar.bg-danger {
+    background-color: #dc3545;
+}
+
+.password-strength .progress-bar.bg-warning {
+    background-color: #ffc107;
+}
+
+.password-strength .progress-bar.bg-success {
+    background-color: #198754;
+}
+
+.requirement-met {
+    color: #198754 !important;
+}
+
+.requirement-met i {
+    color: #198754 !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const progressBar = document.querySelector('.progress-bar');
+    const strengthText = document.getElementById('strengthText');
+    const submitBtn = document.getElementById('submitRegistration');
+    
+    // Password visibility toggle
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+
+    // Password strength checker
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        const requirements = {
+            length: password.length >= 8,
+            letter: /[A-Za-z]/.test(password),
+            number: /\d/.test(password),
+            match: password === confirmPassword.value
+        };
+
+        // Update requirement indicators
+        document.getElementById('lengthCheck').classList.toggle('requirement-met', requirements.length);
+        document.getElementById('letterCheck').classList.toggle('requirement-met', requirements.letter);
+        document.getElementById('numberCheck').classList.toggle('requirement-met', requirements.number);
+        document.getElementById('matchCheck').classList.toggle('requirement-met', requirements.match);
+
+        // Calculate strength
+        if (requirements.length) strength += 25;
+        if (requirements.letter) strength += 25;
+        if (requirements.number) strength += 25;
+        if (requirements.match && password) strength += 25;
+
+        // Update progress bar
+        progressBar.style.width = strength + '%';
+        progressBar.className = 'progress-bar';
+        
+        if (strength <= 25) {
+            progressBar.classList.add('bg-danger');
+            strengthText.textContent = 'Password strength: Too weak';
+        } else if (strength <= 50) {
+            progressBar.classList.add('bg-warning');
+            strengthText.textContent = 'Password strength: Weak';
+        } else if (strength <= 75) {
+            progressBar.classList.add('bg-info');
+            strengthText.textContent = 'Password strength: Good';
+        } else {
+            progressBar.classList.add('bg-success');
+            strengthText.textContent = 'Password strength: Strong';
+        }
+
+        return strength === 100;
+    }
+
+    // Event listeners for password changes
+    password.addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+    });
+
+    confirmPassword.addEventListener('input', function() {
+        checkPasswordStrength(password.value);
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity() || !checkPasswordStrength(password.value)) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+});
+</script>
+{% endblock %} 

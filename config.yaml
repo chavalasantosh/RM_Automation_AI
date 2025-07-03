@@ -1,0 +1,125 @@
+# RME Configuration File - Offline Version
+
+# Server settings
+server:
+  host: "0.0.0.0"  # Allow external connections
+  port: 8001
+  log_level: "info"
+  workers: 1
+  reload: false
+  access_log: true
+
+# Application settings
+app:
+  debug: true
+  log_level: "INFO"
+  log_file: "logs/rme.log"
+  temp_dir: "temp_uploads"
+
+# Document processing settings
+document_processing:
+  max_file_size: 10485760  # 10MB
+  supported_formats:
+    - ".txt"
+    - ".doc"
+    - ".docx"
+    - ".pdf"
+  encoding:
+    default: "utf-8"
+    fallback: 
+      - "latin-1"
+      - "ascii"
+  section_patterns:
+    summary: '(?i)(?:summary|profile|about|overview)(?:.*?)(?=\n\n|\Z)'
+    skills: '(?i)(?:skills|technical skills|competencies)(?:.*?)(?=\n\n|\Z)'
+    experience: '(?i)(?:experience|work history|employment)(?:.*?)(?=\n\n|\Z)'
+    education: '(?i)(?:education|academic|qualifications)(?:.*?)(?=\n\n|\Z)'
+    certifications: '(?i)(?:certifications|certificates|accreditations)(?:.*?)(?=\n\n|\Z)'
+
+# Matching engine settings
+matching:
+  threshold: 0.7
+  weights:
+    skills: 0.4
+    experience: 0.3
+    education: 0.15
+    certifications: 0.15
+  skill_categories:
+    technical: 1.0
+    soft: 0.8
+    domain: 0.9
+  experience:
+    min_years: 0
+    max_years: 50
+    year_pattern: '(?i)(\d+)\s*(?:years?|yrs?)'
+  education:
+    required_levels:
+      - "bachelor"
+      - "master"
+      - "phd"
+
+# Security settings
+security:
+  cors:
+    allowed_origins:
+      - "http://localhost:8001"
+      - "http://127.0.0.1:8001"
+    allowed_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allowed_headers:
+      - "*"
+    allow_credentials: true
+    max_age: 3600
+  file_validation:
+    enabled: true
+    max_size: 10485760  # 10MB
+    allowed_types:
+      - "application/pdf"
+      - "application/msword"
+      - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      - "text/plain"
+    scan_virus: false
+
+# Output settings
+output:
+  formats:
+    - "txt"
+    - "pdf"
+    - "docx"
+  default_format: "txt"
+  pdf:
+    font: "Arial"
+    font_size: 11
+  visualization:
+    enabled: true
+    format: "png"
+    dpi: 300
+    style: "seaborn"
+
+# Logging settings
+logging:
+  version: 1
+  formatters:
+    standard:
+      format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+  handlers:
+    file:
+      class: "logging.FileHandler"
+      filename: "logs/rme.log"
+      formatter: "standard"
+      level: "INFO"
+    console:
+      class: "logging.StreamHandler"
+      formatter: "standard"
+      level: "INFO"
+  loggers:
+    "":
+      handlers: 
+        - "file"
+        - "console"
+      level: "INFO"
+      propagate: true 

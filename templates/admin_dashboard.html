@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - RME Enterprise AI Platform{% endblock %}
+
+{% block body_class %}admin-dashboard-page{% endblock %}
+
+{% block extra_css %}
+<style>
+.admin-dashboard-card {
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+    transition: box-shadow 0.2s;
+}
+.admin-dashboard-card:hover {
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.08);
+}
+.admin-dashboard-card .card-header {
+    background: var(--bs-gray-100);
+    border-bottom: none;
+    border-radius: 1rem 1rem 0 0;
+}
+.quick-action-btn {
+    min-width: 120px;
+    margin: 0.25rem;
+}
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+.status-online { background: #198754; }
+.status-offline { background: #dc3545; }
+.status-warning { background: #ffc107; }
+.log-entry {
+    font-size: 0.95rem;
+    border-bottom: 1px solid var(--bs-gray-200);
+    padding: 0.5rem 0;
+}
+.log-entry:last-child { border-bottom: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h1 class="mb-0">Admin Dashboard</h1>
+            <div>
+                <button class="btn btn-outline-primary quick-action-btn"><i class="mdi mdi-refresh me-1"></i>Refresh</button>
+                <button class="btn btn-outline-success quick-action-btn"><i class="mdi mdi-backup-restore me-1"></i>Backup</button>
+                <button class="btn btn-outline-danger quick-action-btn"><i class="mdi mdi-alert-octagon me-1"></i>Clear Logs</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card admin-dashboard-card">
+                <div class="card-header d-flex align-items-center">
+                    <span class="status-indicator status-online"></span>
+                    <span>Server Status</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="mb-2">Online</h5>
+                    <div class="text-secondary mb-2">Uptime: <span id="serverUptime">3 days 4h</span></div>
+                    <div class="progress mb-2" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 98%"></div>
+                    </div>
+                    <div class="text-success">All systems operational</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card admin-dashboard-card">
+                <div class="card-header"><i class="mdi mdi-account-group me-2"></i>User Activity</div>
+                <div class="card-body">
+                    <div class="mb-2">Active Users: <span class="fw-bold">42</span></div>
+                    <div class="mb-2">New Signups (24h): <span class="fw-bold">7</span></div>
+                    <div class="mb-2">Admins: <span class="fw-bold">3</span></div>
+                    <div class="progress mb-2" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: 70%"></div>
+                    </div>
+                    <div class="text-info">User engagement is healthy</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card admin-dashboard-card">
+                <div class="card-header"><i class="mdi mdi-alert-circle-outline me-2"></i>Error Logs</div>
+                <div class="card-body" style="max-height: 180px; overflow-y: auto;">
+                    <div class="log-entry text-danger"><i class="mdi mdi-alert me-1"></i>Database connection timeout (2h ago)</div>
+                    <div class="log-entry text-warning"><i class="mdi mdi-alert me-1"></i>Slow API response (5h ago)</div>
+                    <div class="log-entry text-danger"><i class="mdi mdi-alert me-1"></i>Failed login attempt (7h ago)</div>
+                    <div class="log-entry text-info"><i class="mdi mdi-information-outline me-1"></i>System update completed (1d ago)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card admin-dashboard-card">
+                <div class="card-header"><i class="mdi mdi-tools me-2"></i>Quick Admin Tools</div>
+                <div class="card-body d-flex flex-wrap gap-3">
+                    <button class="btn btn-outline-primary"><i class="mdi mdi-account-plus me-1"></i>Add User</button>
+                    <button class="btn btn-outline-secondary"><i class="mdi mdi-database-search me-1"></i>View Logs</button>
+                    <button class="btn btn-outline-success"><i class="mdi mdi-shield-key me-1"></i>Manage Roles</button>
+                    <button class="btn btn-outline-warning"><i class="mdi mdi-cog me-1"></i>System Settings</button>
+                    <button class="btn btn-outline-danger"><i class="mdi mdi-delete-sweep-outline me-1"></i>Purge Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

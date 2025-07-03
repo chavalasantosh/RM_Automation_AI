@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We'd Love Your Feedback – Resume Matching Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .email-wrapper { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: #20c997; color: #fff; text-align: center; padding: 30px 20px; }
+        .logo { max-width: 150px; margin-bottom: 20px; }
+        .header h1 { font-size: 24px; margin-bottom: 10px; }
+        .content { padding: 40px 20px; }
+        .feedback-box { background: #e7f5ff; border: 1px solid #b8daff; color: #007bff; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .feedback-title { font-size: 20px; color: #20c997; margin-bottom: 10px; }
+        .feedback-date { font-size: 14px; color: #6c757d; margin-bottom: 20px; }
+        .feedback-body { font-size: 16px; color: #333; margin-bottom: 20px; }
+        .survey { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .survey h3 { color: #20c997; font-size: 18px; margin-bottom: 10px; }
+        .survey p { font-size: 14px; color: #333; margin-bottom: 10px; }
+        .cta-section { text-align: center; margin: 30px 0; }
+        .button { display: inline-block; padding: 12px 30px; background: #20c997; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin: 10px 0; text-align: center; }
+        .button:hover { background: #1baa8a; }
+        .footer { padding: 20px; text-align: center; font-size: 14px; color: #6c757d; }
+        .footer p { margin-bottom: 10px; }
+        @media only screen and (max-width: 600px) { .container { padding: 10px; } .content { padding: 30px 10px; } .header { padding: 20px 10px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+  <div class="email-wrapper">
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+      <h1>We'd Love Your Feedback</h1>
+    </div>
+    <div class="content">
+      <div class="feedback-box">
+        <div class="feedback-title">Hello, {{ recipient_name }}!</div>
+        <div class="feedback-date">Sent On: {{ feedback_date }}</div>
+        <div class="feedback-body">{{ feedback_body|safe }}</div>
+      </div>
+      <div class="survey">
+        <h3>Quick Survey</h3>
+        <p>Please take a moment to let us know how we did. Your feedback helps us improve our service.</p>
+        <p>Survey Link: <a href="{{ survey_url }}">{{ survey_url }}</a></p>
+      </div>
+      {% if cta_url and cta_text %}
+      <div class="cta-section">
+        <a href="{{ cta_url }}" class="button">{{ cta_text }}</a>
+      </div>
+      {% endif %}
+    </div>
+    <div class="footer">
+      <p>For questions or help, contact <a href="mailto:support@resumematcher.com">support@resumematcher.com</a></p>
+      <p>© {{ current_year }} Resume Matching Engine. All rights reserved.<br><small>This email was sent to {{ recipient_email }}. To manage your notification preferences, <a href="{{ preferences_url }}">{{ preferences_url }}</a>.</small></p>
+    </div>
+  </div>
+</div>
+</body>
+</html> 

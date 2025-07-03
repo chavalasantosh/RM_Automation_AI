@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Account Activity Summary - Resume Matching Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .email-wrapper { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: #007bff; color: #fff; text-align: center; padding: 30px 20px; }
+        .logo { max-width: 150px; margin-bottom: 20px; }
+        .header h1 { font-size: 24px; margin-bottom: 10px; }
+        .content { padding: 40px 20px; }
+        .summary-section { margin-bottom: 30px; }
+        .section-title { font-size: 18px; color: #007bff; margin-bottom: 10px; }
+        .activity-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .activity-table th, .activity-table td { padding: 8px 6px; border-bottom: 1px solid #e9ecef; font-size: 14px; }
+        .activity-table th { background: #f8f9fa; color: #007bff; text-align: left; }
+        .stat-box { display: inline-block; background: #e7f5ff; border: 1px solid #b8daff; border-radius: 8px; padding: 15px 20px; margin: 10px 10px 10px 0; font-size: 16px; color: #007bff; font-weight: 600; }
+        .security-section { background: #fff3cd; border: 1px solid #ffeeba; border-radius: 8px; padding: 20px; margin-bottom: 30px; }
+        .footer { padding: 20px; text-align: center; font-size: 14px; color: #6c757d; }
+        .footer p { margin-bottom: 10px; }
+        @media only screen and (max-width: 600px) { .container { padding: 10px; } .content { padding: 30px 10px; } .header { padding: 20px 10px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+  <div class="email-wrapper">
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+      <h1>Your Account Activity Summary</h1>
+      <p style="font-size:16px; color:#e9ecef;">Hello {{ user.first_name }}, here's a summary of your recent activity.</p>
+    </div>
+    <div class="content">
+      <!-- Quick Stats -->
+      <div class="summary-section">
+        <span class="stat-box">{{ stats.total_logins }} Logins</span>
+        <span class="stat-box">{{ stats.total_uploads }} Resumes Uploaded</span>
+        <span class="stat-box">{{ stats.total_matches }} Matches</span>
+        <span class="stat-box">{{ stats.total_jobs }} Jobs Posted</span>
+      </div>
+      <!-- Login Activity -->
+      <div class="summary-section">
+        <div class="section-title">Recent Login Activity</div>
+        <table class="activity-table">
+          <tr><th>Date</th><th>IP Address</th><th>Location</th><th>Device</th></tr>
+          {% for login in logins %}
+          <tr><td>{{ login.date }}</td><td>{{ login.ip }}</td><td>{{ login.location }}</td><td>{{ login.device }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      <!-- Job Matches -->
+      <div class="summary-section">
+        <div class="section-title">Recent Job Matches</div>
+        <table class="activity-table">
+          <tr><th>Profile</th><th>Job</th><th>Score</th><th>Date</th></tr>
+          {% for match in matches %}
+          <tr><td>{{ match.profile }}</td><td>{{ match.job }}</td><td>{{ match.score }}%</td><td>{{ match.date }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      <!-- Uploads -->
+      <div class="summary-section">
+        <div class="section-title">Recent Uploads</div>
+        <table class="activity-table">
+          <tr><th>Filename</th><th>Date</th><th>Status</th></tr>
+          {% for upload in uploads %}
+          <tr><td>{{ upload.filename }}</td><td>{{ upload.date }}</td><td>{{ upload.status }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      <!-- Security Events -->
+      <div class="security-section">
+        <div class="section-title" style="color:#856404;">Security Events</div>
+        {% if security_events %}
+        <table class="activity-table">
+          <tr><th>Date</th><th>Event</th><th>Details</th></tr>
+          {% for event in security_events %}
+          <tr><td>{{ event.date }}</td><td>{{ event.type }}</td><td>{{ event.details }}</td></tr>
+          {% endfor %}
+        </table>
+        {% else %}
+        <p>No unusual security events detected.</p>
+        {% endif %}
+      </div>
+      <div style="text-align:center; margin:30px 0;">
+        <a href="{{ activity_log_url }}" style="display:inline-block; padding:12px 30px; background:#007bff; color:#fff; border-radius:6px; text-decoration:none; font-weight:600;">View Full Activity Log</a>
+      </div>
+    </div>
+    <div class="footer">
+      <p>For questions or concerns, contact <a href="mailto:support@resumematcher.com">support@resumematcher.com</a></p>
+      <p>© {{ current_year }} Resume Matching Engine. All rights reserved.<br><small>This email was sent to {{ user.email }}. To manage your notification preferences, <a href="{{ preferences_url }}">click here</a>.</small></p>
+    </div>
+  </div>
+</div>
+</body>
+</html> 

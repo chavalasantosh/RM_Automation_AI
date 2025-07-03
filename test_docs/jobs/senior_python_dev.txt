@@ -1,0 +1,38 @@
+Senior Python Developer
+
+We are seeking an experienced Senior Python Developer to join our team. The ideal candidate should have strong expertise in Python development and related technologies.
+
+Required Skills:
+- Python (Advanced)
+- Django/Flask (Advanced)
+- SQL (Intermediate)
+- AWS (Intermediate)
+- Docker (Intermediate)
+- Git (Advanced)
+
+Experience:
+- Minimum 5+ years of experience in Python development
+- Experience with microservices architecture
+- Experience with cloud platforms (AWS preferred)
+
+Certifications:
+- AWS Certified Developer
+- Python Professional Certification
+
+Responsibilities:
+- Design and develop scalable Python applications
+- Implement best practices and coding standards
+- Mentor junior developers
+- Collaborate with cross-functional teams
+- Write clean, maintainable, and efficient code
+
+Additional Skills (Preferred):
+- Kubernetes
+- CI/CD
+- Machine Learning
+- Data Analysis
+- RESTful APIs
+- GraphQL
+
+Location: Remote
+Availability: Immediate 

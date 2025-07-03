@@ -1,0 +1,22 @@
+Name: Priya Patel
+Experience: 7 years
+Skills:
+- Python
+- Machine Learning
+- Deep Learning
+- PyTorch
+- Computer Vision
+- OpenCV
+- C++
+- CUDA
+- Docker
+- Kubernetes
+- AWS
+- MLOps
+
+Certifications:
+- AWS Solutions Architect
+- Google Cloud Professional ML Engineer
+- NVIDIA Deep Learning Institute Certification
+
+Bio: Senior Machine Learning Engineer specializing in computer vision and deep learning. Extensive experience in developing and deploying computer vision models for real-time applications. Strong background in GPU optimization and model deployment. Led multiple projects involving large-scale computer vision systems. 

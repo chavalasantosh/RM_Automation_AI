@@ -1,0 +1,21 @@
+Senior Machine Learning Engineer
+
+We are seeking a Senior Machine Learning Engineer with experience in:
+- Python
+- Deep Learning
+- TensorFlow
+- PyTorch
+- Data Analysis
+- AWS
+- Docker
+- MLOps
+
+Required Skills:
+- 5+ years of experience in machine learning and deep learning
+- Experience with cloud platforms (AWS, Google Cloud)
+- Strong programming skills in Python and C++
+- Familiarity with DevOps tools (Docker, Kubernetes, Git)
+
+Preferred Certifications:
+- AWS Machine Learning Specialty
+- TensorFlow Developer Certificate 

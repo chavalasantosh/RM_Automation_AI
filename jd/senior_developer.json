@@ -1,0 +1,24 @@
+{
+    "job_title": "Senior Software Developer",
+    "required_skills": [
+        "Python",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "SQL",
+        "Git",
+        "Docker",
+        "AWS",
+        "CI/CD",
+        "System Design"
+    ],
+    "required_experience": 5,
+    "required_certifications": [
+        "AWS Certified Developer",
+        "Microsoft Certified: Azure Developer Associate"
+    ],
+    "job_description": "We are seeking an experienced Senior Software Developer to join our team. The ideal candidate should have strong expertise in full-stack development, cloud technologies, and system design. The role involves leading development projects, mentoring junior developers, and implementing best practices in software development.",
+    "required_availability": "Full-time",
+    "location": "Remote",
+    "salary_range": "$120,000 - $150,000"
+} 

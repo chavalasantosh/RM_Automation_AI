@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - Resume Matching Engine{% endblock %}
+
+{% block body_class %}error-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-primary);
+        padding: 2rem;
+    }
+
+    .error-container {
+        text-align: center;
+        max-width: 600px;
+        padding: 3rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        box-shadow: var(--glass-shadow);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .error-code {
+        font-size: 8rem;
+        font-weight: 700;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+
+    .error-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+    }
+
+    .error-message {
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .error-button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .error-button.primary {
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+    }
+
+    .error-button.secondary {
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .error-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    }
+
+    .error-button.secondary:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .error-illustration {
+        max-width: 300px;
+        margin: 0 auto 2rem;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .error-code {
+            font-size: 6rem;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+        }
+
+        .error-actions {
+            flex-direction: column;
+        }
+
+        .error-button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="mb-4">
+                <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                <h1 class="display-4 mb-3">404</h1>
+                <h2 class="h4 mb-4">Page Not Found</h2>
+                <p class="text-muted mb-4">
+                    The page you're looking for doesn't exist or has been moved.
+                    Please check the URL or try one of the following:
+                </p>
+            </div>
+            <div class="d-flex justify-content-center gap-3 mb-5">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>Go Home
+                </a>
+                <a href="/dashboard" class="btn btn-outline-primary">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <button class="btn btn-outline-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left me-2"></i>Go Back
+                </button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Quick Links</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a href="/upload" class="text-decoration-none">
+                                <div class="p-3 border rounded text-center">
+                                    <i class="fas fa-upload fa-2x text-primary mb-2"></i>
+                                    <div>Upload Resumes</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/jobs" class="text-decoration-none">
+                                <div class="p-3 border rounded text-center">
+                                    <i class="fas fa-briefcase fa-2x text-primary mb-2"></i>
+                                    <div>View Jobs</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/matches" class="text-decoration-none">
+                                <div class="p-3 border rounded text-center">
+                                    <i class="fas fa-handshake fa-2x text-primary mb-2"></i>
+                                    <div>View Matches</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth transition when navigating back
+    document.querySelector('.error-button.primary').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+            window.location.href = this.href;
+        }, 300);
+    });
+});
+</script>
+{% endblock %} 

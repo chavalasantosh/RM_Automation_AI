@@ -1,0 +1,47 @@
+John Doe
+Python Developer
+
+Profile:
+Experienced Python developer with 6 years of experience in building scalable applications and microservices. Strong background in web development and cloud technologies.
+
+Skills:
+- Python (Expert)
+- Django (Advanced)
+- Flask (Advanced)
+- SQL (Advanced)
+- AWS (Intermediate)
+- Docker (Advanced)
+- Git (Advanced)
+- Kubernetes (Intermediate)
+- RESTful APIs (Advanced)
+- GraphQL (Intermediate)
+
+Experience:
+- 6+ years of experience in Python development
+- Led development of multiple microservices
+- Experience with cloud platforms (AWS, GCP)
+- Strong background in CI/CD implementation
+
+Certifications:
+- AWS Certified Developer
+- Python Professional Certification
+- Docker Certified Associate
+
+Projects:
+1. E-commerce Platform
+   - Built scalable microservices using Python and Django
+   - Implemented CI/CD pipeline
+   - Reduced deployment time by 40%
+
+2. Data Processing System
+   - Developed real-time data processing system
+   - Implemented using Python and Apache Kafka
+   - Handled 1M+ transactions daily
+
+Education:
+- B.S. in Computer Science
+- M.S. in Software Engineering
+
+Availability: Immediate
+Location: Remote
+Preferred Work Type: Full-time 

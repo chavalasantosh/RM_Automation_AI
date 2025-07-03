@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Your Email - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Verification Card -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <div class="verification-icon bg-primary bg-gradient text-white rounded-circle mx-auto mb-3">
+                            <i class="fas fa-envelope-open-text fa-2x"></i>
+                        </div>
+                        <h1 class="h3 mb-3">Verify Your Email</h1>
+                        <p class="text-muted">
+                            We've sent a verification link to <strong>{{ email }}</strong>
+                        </p>
+                    </div>
+
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Instructions -->
+                    <div class="verification-steps mb-4">
+                        <div class="step-item d-flex align-items-center mb-3">
+                            <div class="step-number bg-primary bg-gradient text-white rounded-circle me-3">1</div>
+                            <div class="step-content">
+                                <h6 class="mb-1">Check Your Email</h6>
+                                <p class="text-muted small mb-0">Open the email we sent to your inbox</p>
+                            </div>
+                        </div>
+                        <div class="step-item d-flex align-items-center mb-3">
+                            <div class="step-number bg-primary bg-gradient text-white rounded-circle me-3">2</div>
+                            <div class="step-content">
+                                <h6 class="mb-1">Click the Verification Link</h6>
+                                <p class="text-muted small mb-0">Click the link in the email to verify your account</p>
+                            </div>
+                        </div>
+                        <div class="step-item d-flex align-items-center">
+                            <div class="step-number bg-primary bg-gradient text-white rounded-circle me-3">3</div>
+                            <div class="step-content">
+                                <h6 class="mb-1">Start Using Your Account</h6>
+                                <p class="text-muted small mb-0">Once verified, you can access all features</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resend Section -->
+                    <div class="card bg-light border-0 mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="h6 mb-3">Didn't receive the email?</h5>
+                            <p class="text-muted small mb-3">
+                                Check your spam folder or try resending the verification email.
+                                You can request a new verification email every 60 seconds.
+                            </p>
+                            <form method="POST" action="{{ url_for('auth.resend_verification') }}" id="resendForm">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-outline-primary" id="resendButton" 
+                                            {% if cooldown > 0 %}disabled{% endif %}>
+                                        <i class="fas fa-paper-plane me-2"></i>
+                                        <span id="resendText">
+                                            {% if cooldown > 0 %}
+                                                Resend in <span id="cooldownTimer">{{ cooldown }}</span>s
+                                            {% else %}
+                                                Resend Verification Email
+                                            {% endif %}
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Help Section -->
+                    <div class="card bg-light border-0">
+                        <div class="card-body p-4">
+                            <h5 class="h6 mb-3">Need Help?</h5>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-question-circle text-primary me-3 fa-lg"></i>
+                                <div>
+                                    <h6 class="mb-1">Email Not Received?</h6>
+                                    <p class="text-muted small mb-0">
+                                        Make sure you entered the correct email address. 
+                                        If you need to change it, please contact support.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-envelope text-primary me-3 fa-lg"></i>
+                                <div>
+                                    <h6 class="mb-1">Contact Support</h6>
+                                    <p class="text-muted small mb-0">
+                                        If you're still having trouble, our support team is here to help.
+                                        <a href="{{ url_for('main.contact') }}" class="text-decoration-none">Contact us</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sign Out Option -->
+                    <div class="text-center mt-4">
+                        <p class="mb-0">
+                            <a href="{{ url_for('auth.logout') }}" class="text-decoration-none">
+                                <i class="fas fa-sign-out-alt me-1"></i>Sign Out
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.verification-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.verification-steps .step-item {
+    position: relative;
+}
+
+.verification-steps .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 40px;
+    bottom: -20px;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+.btn-outline-primary:disabled {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+#resendButton:disabled {
+    cursor: not-allowed;
+}
+
+.help-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bs-primary);
+    color: white;
+    border-radius: 50%;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const resendButton = document.getElementById('resendButton');
+    const cooldownTimer = document.getElementById('cooldownTimer');
+    let cooldown = {{ cooldown }};
+
+    if (cooldown > 0) {
+        const timer = setInterval(() => {
+            cooldown--;
+            if (cooldownTimer) {
+                cooldownTimer.textContent = cooldown;
+            }
+            
+            if (cooldown <= 0) {
+                clearInterval(timer);
+                resendButton.disabled = false;
+                document.getElementById('resendText').innerHTML = 'Resend Verification Email';
+            }
+        }, 1000);
+    }
+
+    // Form submission handler
+    const resendForm = document.getElementById('resendForm');
+    resendForm.addEventListener('submit', function(e) {
+        if (cooldown > 0) {
+            e.preventDefault();
+            return;
+        }
+        
+        resendButton.disabled = true;
+        cooldown = 60;
+        if (cooldownTimer) {
+            cooldownTimer.textContent = cooldown;
+        }
+        
+        const timer = setInterval(() => {
+            cooldown--;
+            if (cooldownTimer) {
+                cooldownTimer.textContent = cooldown;
+            }
+            
+            if (cooldown <= 0) {
+                clearInterval(timer);
+                resendButton.disabled = false;
+                document.getElementById('resendText').innerHTML = 'Resend Verification Email';
+            }
+        }, 1000);
+    });
+});
+</script>
+{% endblock %} 

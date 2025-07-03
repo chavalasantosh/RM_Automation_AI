@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Offline - RME Enterprise AI Platform{% endblock %}
+
+{% block content %}
+<div class="container text-center py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="mb-4">
+                <defs>
+                    <linearGradient id="offlineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:0.1" />
+                        <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:0.1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="90" fill="url(#offlineGradient)"/>
+                <path d="M70,70 L130,130 M130,70 L70,130" stroke="#4F46E5" stroke-width="8" stroke-linecap="round"/>
+                <circle cx="100" cy="100" r="60" fill="none" stroke="#4F46E5" stroke-width="4" stroke-dasharray="4 4"/>
+            </svg>
+            
+            <h1 class="display-4 mb-4">You're Offline</h1>
+            <p class="lead text-secondary mb-4">
+                It seems you've lost your internet connection. Don't worry, you can still access your cached data.
+            </p>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-primary" onclick="window.location.reload()">
+                    <i class="mdi mdi-refresh me-2"></i>Try Again
+                </button>
+                <button class="btn btn-outline-primary" onclick="window.history.back()">
+                    <i class="mdi mdi-arrow-left me-2"></i>Go Back
+                </button>
+            </div>
+            
+            <div class="mt-5">
+                <h5 class="mb-3">Available Offline Features:</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="mdi mdi-file-document-outline text-primary mb-3" style="font-size: 2rem;"></i>
+                                <h6>View Documents</h6>
+                                <p class="small text-secondary mb-0">Access your recently viewed documents</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="mdi mdi-account-outline text-primary mb-3" style="font-size: 2rem;"></i>
+                                <h6>Profile</h6>
+                                <p class="small text-secondary mb-0">View your profile information</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="mdi mdi-cog-outline text-primary mb-3" style="font-size: 2rem;"></i>
+                                <h6>Settings</h6>
+                                <p class="small text-secondary mb-0">Access your saved settings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Check connection status periodically
+setInterval(() => {
+    if (navigator.onLine) {
+        window.location.reload();
+    }
+}, 5000);
+
+// Listen for online event
+window.addEventListener('online', () => {
+    window.location.reload();
+});
+</script>
+{% endblock %} 

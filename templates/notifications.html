@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - RME Enterprise AI Platform{% endblock %}
+
+{% block body_class %}notifications-page{% endblock %}
+
+{% block extra_css %}
+<style>
+.notifications-sidebar {
+    min-width: 220px;
+    border-right: 1px solid var(--bs-gray-200);
+    background: var(--bs-gray-50);
+    padding: 2rem 1rem 2rem 0;
+    height: 100%;
+}
+.notifications-sidebar .nav-link {
+    color: var(--bs-gray-700);
+    font-weight: 500;
+    border-radius: 0.5rem 0 0 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.notifications-sidebar .nav-link.active {
+    background: var(--bs-primary);
+    color: #fff;
+}
+.notification-card {
+    border: 1px solid var(--bs-gray-200);
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 1.25rem 1rem;
+    background: #fff;
+    transition: box-shadow 0.2s;
+    position: relative;
+}
+.notification-card.unread {
+    border-left: 4px solid var(--bs-primary);
+    background: var(--bs-primary-bg-subtle);
+}
+.notification-card .notification-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.notification-card .notification-meta {
+    font-size: 0.85rem;
+    color: var(--bs-gray-600);
+}
+.notification-card .notification-actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.notification-card .notification-actions button {
+    border: none;
+    background: none;
+    color: var(--bs-gray-500);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.notification-card .notification-actions button:hover {
+    color: var(--bs-primary);
+}
+.bulk-actions {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+@media (max-width: 991px) {
+    .notifications-sidebar {
+        min-width: 0;
+        border-right: none;
+        padding: 1rem 0;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 mb-4 mb-lg-0">
+            <div class="notifications-sidebar">
+                <h5 class="mb-4">Notifications</h5>
+                <nav class="nav flex-column">
+                    <a class="nav-link active" id="tab-all" href="#" onclick="showTab('all')"><i class="mdi mdi-bell-outline me-2"></i>All</a>
+                    <a class="nav-link" id="tab-unread" href="#" onclick="showTab('unread')"><i class="mdi mdi-bell-alert-outline me-2"></i>Unread</a>
+                    <a class="nav-link" id="tab-system" href="#" onclick="showTab('system')"><i class="mdi mdi-server me-2"></i>System</a>
+                    <a class="nav-link" id="tab-user" href="#" onclick="showTab('user')"><i class="mdi mdi-account-circle-outline me-2"></i>User</a>
+                </nav>
+                <hr>
+                <h6 class="mt-4 mb-2">Settings</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-secondary"><i class="mdi mdi-bell-ring-outline me-2"></i>Notification Preferences</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary"><i class="mdi mdi-email-outline me-2"></i>Email Alerts</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary"><i class="mdi mdi-cog-outline me-2"></i>Advanced Settings</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="bulk-actions no-print">
+                <button class="btn btn-outline-primary btn-sm" onclick="markAllRead()"><i class="mdi mdi-check-all me-1"></i>Mark All as Read</button>
+                <button class="btn btn-outline-danger btn-sm" onclick="deleteAllNotifications()"><i class="mdi mdi-delete-outline me-1"></i>Delete All</button>
+                <div class="ms-auto">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search notifications..." id="notificationSearch" style="width: 220px;">
+                </div>
+            </div>
+            <div id="notificationsList">
+                <!-- Notification cards will be loaded here -->
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <button class="btn btn-outline-secondary" id="loadMoreBtn" onclick="loadMoreNotifications()"><i class="mdi mdi-chevron-down me-1"></i>Load More</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Initialize notifications page
+        initializeNotifications();
+        // Load notifications data
+        loadNotificationsData();
+    } catch (err) {
+        console.error('Error initializing notifications:', err);
+        showNotification('Failed to load notifications. Please try again.', 'error');
+    }
+});
+
+let currentTab = 'all';
+let notifications = [];
+let page = 1;
+
+function showTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.notifications-sidebar .nav-link').forEach(link => link.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    page = 1;
+    loadNotifications();
+}
+
+function loadNotifications() {
+    // Simulate API call
+    setTimeout(() => {
+        // For demo, generate fake notifications
+        notifications = generateFakeNotifications(currentTab, page);
+        renderNotifications();
+    }, 200);
+}
+
+function renderNotifications() {
+    const container = document.getElementById('notificationsList');
+    container.innerHTML = notifications.map(n => `
+        <div class="notification-card${n.unread ? ' unread' : ''}">
+            <div class="notification-title">${n.title}</div>
+            <div class="notification-meta mb-2">
+                <i class="mdi mdi-calendar-clock me-1"></i>${n.time} &middot; <span class="text-capitalize">${n.type}</span>
+            </div>
+            <div>${n.message}</div>
+            <div class="notification-actions">
+                <button title="Mark as Read" onclick="markRead('${n.id}')"><i class="mdi mdi-check"></i></button>
+                <button title="Delete" onclick="deleteNotification('${n.id}')"><i class="mdi mdi-delete"></i></button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function markRead(id) {
+    notifications = notifications.map(n => n.id === id ? { ...n, unread: false } : n);
+    renderNotifications();
+}
+
+function deleteNotification(id) {
+    notifications = notifications.filter(n => n.id !== id);
+    renderNotifications();
+}
+
+function markAllRead() {
+    notifications = notifications.map(n => ({ ...n, unread: false }));
+    renderNotifications();
+}
+
+function deleteAllNotifications() {
+    notifications = [];
+    renderNotifications();
+}
+
+function loadMoreNotifications() {
+    page++;
+    // Simulate loading more
+    notifications = notifications.concat(generateFakeNotifications(currentTab, page));
+    renderNotifications();
+}
+
+document.getElementById('notificationSearch').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    renderNotifications(notifications.filter(n => n.title.toLowerCase().includes(query) || n.message.toLowerCase().includes(query)));
+});
+
+function generateFakeNotifications(tab, page) {
+    // Generate 8 fake notifications per page
+    const types = ['system', 'user'];
+    const titles = ['System Update', 'New Match Found', 'Profile Updated', 'Job Posted', 'Resume Uploaded', 'Password Changed', 'Interview Scheduled', 'Feedback Received'];
+    const messages = [
+        'A new system update is available.',
+        'You have a new job-candidate match.',
+        'Your profile information was updated.',
+        'A new job has been posted.',
+        'A resume was uploaded successfully.',
+        'Your password was changed.',
+        'An interview has been scheduled.',
+        'Thank you for your feedback!'
+    ];
+    let arr = [];
+    for (let i = 0; i < 8; i++) {
+        let type = types[i % 2];
+        if (tab !== 'all' && tab !== type && tab !== 'unread') continue;
+        arr.push({
+            id: `${tab}-${page}-${i}`,
+            title: titles[i % titles.length],
+            message: messages[i % messages.length],
+            time: `${Math.floor(Math.random()*24)}h ago`,
+            type,
+            unread: tab === 'unread' ? true : Math.random() > 0.5
+        });
+    }
+    return arr;
+}
+
+// Initial load
+showTab('all');
+</script>
+{% endblock %} 

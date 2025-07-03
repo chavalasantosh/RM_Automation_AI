@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile - Resume Matching Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .email-wrapper { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: #28a745; color: #fff; text-align: center; padding: 30px 20px; }
+        .logo { max-width: 150px; margin-bottom: 20px; }
+        .header h1 { font-size: 24px; margin-bottom: 10px; }
+        .content { padding: 40px 20px; }
+        .reminder-box { background: #e7f5ff; border: 1px solid #b8daff; color: #007bff; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .reminder-box h2 { font-size: 20px; margin-bottom: 10px; }
+        .progress-bar-bg { background: #e9ecef; border-radius: 20px; height: 16px; width: 100%; margin: 20px 0; }
+        .progress-bar { background: #28a745; height: 16px; border-radius: 20px; width: {{ profile_completion }}%; transition: width 0.5s; }
+        .progress-label { font-size: 14px; color: #333; margin-bottom: 10px; }
+        .benefits { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .benefits h3 { color: #28a745; font-size: 18px; margin-bottom: 10px; }
+        .benefit-item { margin-bottom: 10px; font-size: 14px; }
+        .button { display: inline-block; padding: 12px 30px; background: #28a745; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin: 10px 0; text-align: center; }
+        .button:hover { background: #218838; }
+        .footer { padding: 20px; text-align: center; font-size: 14px; color: #6c757d; }
+        .footer p { margin-bottom: 10px; }
+        @media only screen and (max-width: 600px) { .container { padding: 10px; } .content { padding: 30px 10px; } .header { padding: 20px 10px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+  <div class="email-wrapper">
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+      <h1>Complete Your Profile</h1>
+    </div>
+    <div class="content">
+      <div class="reminder-box">
+        <h2>You're Almost There, {{ user.first_name }}!</h2>
+        <div class="progress-label">Profile Completion: <strong>{{ profile_completion }}%</strong></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar"></div>
+        </div>
+        <p>Complete your profile to unlock better job matches and platform features.</p>
+        <a href="{{ profile_url }}" class="button">Complete My Profile</a>
+      </div>
+      <div class="benefits">
+        <h3>Why Complete Your Profile?</h3>
+        <div class="benefit-item">✔️ Get more accurate and relevant job matches</div>
+        <div class="benefit-item">✔️ Improve your visibility to recruiters and hiring managers</div>
+        <div class="benefit-item">✔️ Access advanced analytics and insights</div>
+        <div class="benefit-item">✔️ Receive personalized recommendations</div>
+        <div class="benefit-item">✔️ Unlock all platform features</div>
+      </div>
+      <div style="text-align:center; margin:30px 0;">
+        <a href="{{ help_center_url }}" class="button" style="background:#17a2b8;">Need Help?</a>
+      </div>
+    </div>
+    <div class="footer">
+      <p>For questions or help, contact <a href="mailto:support@resumematcher.com">support@resumematcher.com</a></p>
+      <p>© {{ current_year }} Resume Matching Engine. All rights reserved.<br><small>This email was sent to {{ user.email }}. To manage your notification preferences, <a href="{{ preferences_url }}">click here</a>.</small></p>
+    </div>
+  </div>
+</div>
+</body>
+</html> 

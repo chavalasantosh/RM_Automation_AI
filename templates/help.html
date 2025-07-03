@@ -1,0 +1,366 @@
+{% extends "base.html" %}
+
+{% block title %}Help Center - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">Help Center</h1>
+                <p class="lead text-muted">
+                    Find answers to common questions and learn how to use our platform effectively.
+                </p>
+            </div>
+
+            <!-- Search -->
+            <div class="card border-0 shadow-sm mb-5">
+                <div class="card-body p-4">
+                    <form class="search-form" onsubmit="return false;">
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-lg" 
+                                   id="searchInput" placeholder="Search for help..."
+                                   aria-label="Search help articles">
+                            <button class="btn btn-primary" type="button" onclick="searchHelp()">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+                    </form>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <a href="#getting-started" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="help-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                                    <i class="fas fa-rocket fa-2x"></i>
+                                </div>
+                                <h3 class="h5 mb-3">Getting Started</h3>
+                                <p class="text-muted mb-0">
+                                    Learn the basics of using our platform
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#uploading" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="help-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                                    <i class="fas fa-upload fa-2x"></i>
+                                </div>
+                                <h3 class="h5 mb-3">Uploading Documents</h3>
+                                <p class="text-muted mb-0">
+                                    How to upload and manage your documents
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="#matching" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="help-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                                    <i class="fas fa-magic fa-2x"></i>
+                            </div>
+                                <h3 class="h5 mb-3">Matching Process</h3>
+                                <p class="text-muted mb-0">
+                                    Understanding how our AI matching works
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- FAQ Sections -->
+            <div class="accordion" id="helpAccordion">
+                <!-- Getting Started -->
+                <div class="card border-0 shadow-sm mb-4" id="getting-started">
+                    <div class="card-header bg-white">
+                        <h2 class="h4 mb-0">
+                            <i class="fas fa-rocket text-primary me-2"></i>
+                            Getting Started
+                        </h2>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="accordion-item border-0">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#start1" aria-expanded="true">
+                                    How do I create an account?
+                                </button>
+                            </h3>
+                            <div id="start1" class="accordion-collapse collapse show" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>To create an account:</p>
+                                    <ol>
+                                        <li>Click the "Sign Up" button in the top right corner</li>
+                                        <li>Fill in your email address and choose a password</li>
+                                        <li>Verify your email address</li>
+                                        <li>Complete your profile information</li>
+                                    </ol>
+                                </div>
+                            </div>
+                                    </div>
+                        <div class="accordion-item border-0">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#start2">
+                                    What are the system requirements?
+                                </button>
+                            </h3>
+                            <div id="start2" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Our platform works best with:</p>
+                                    <ul>
+                                        <li>Modern web browsers (Chrome, Firefox, Safari, Edge)</li>
+                                        <li>Internet connection (minimum 1 Mbps)</li>
+                                        <li>JavaScript enabled</li>
+                                        <li>Cookies enabled</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uploading Documents -->
+                <div class="card border-0 shadow-sm mb-4" id="uploading">
+                    <div class="card-header bg-white">
+                        <h2 class="h4 mb-0">
+                            <i class="fas fa-upload text-primary me-2"></i>
+                            Uploading Documents
+                        </h2>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="accordion-item border-0">
+                        <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#upload1">
+                                    What file formats are supported?
+                            </button>
+                        </h3>
+                            <div id="upload1" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body">
+                                    <p>We support the following file formats:</p>
+                                    <ul>
+                                        <li>PDF (.pdf)</li>
+                                        <li>Microsoft Word (.doc, .docx)</li>
+                                        <li>Text files (.txt)</li>
+                                    </ul>
+                                    <p class="mb-0">Maximum file size: 10MB per file</p>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item border-0">
+                        <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#upload2">
+                                    How do I upload multiple files?
+                            </button>
+                        </h3>
+                            <div id="upload2" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body">
+                                    <p>To upload multiple files:</p>
+                                    <ol>
+                                        <li>Go to the Upload page</li>
+                                        <li>Click "Browse Files" or drag and drop files</li>
+                                        <li>Select multiple files (hold Ctrl/Cmd while clicking)</li>
+                                        <li>Click "Upload" to start the process</li>
+                                    </ol>
+                                    <p class="mb-0">You can also drag and drop files directly onto the upload zone.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matching Process -->
+                <div class="card border-0 shadow-sm mb-4" id="matching">
+                    <div class="card-header bg-white">
+                        <h2 class="h4 mb-0">
+                            <i class="fas fa-magic text-primary me-2"></i>
+                            Matching Process
+                        </h2>
+                            </div>
+                    <div class="card-body p-0">
+                        <div class="accordion-item border-0">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#match1">
+                                    How does the AI matching work?
+                                </button>
+                            </h3>
+                            <div id="match1" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Our AI matching process:</p>
+                                    <ol>
+                                        <li>Analyzes job descriptions and resumes</li>
+                                        <li>Extracts key skills and requirements</li>
+                                        <li>Identifies experience levels and qualifications</li>
+                                        <li>Calculates compatibility scores</li>
+                                        <li>Ranks matches based on multiple factors</li>
+                                    </ol>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item border-0">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#match2">
+                                    How accurate are the matches?
+                                </button>
+                            </h3>
+                            <div id="match2" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    <p>Our matching algorithm is highly accurate, considering:</p>
+                                    <ul>
+                                        <li>Skill relevance and proficiency</li>
+                                        <li>Experience level matching</li>
+                                        <li>Industry-specific requirements</li>
+                                        <li>Location and availability</li>
+                                    </ul>
+                                    <p class="mb-0">Matches are continuously improved through machine learning.</p>
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still Need Help -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 text-center">
+                    <h2 class="h4 mb-3">Still Need Help?</h2>
+                    <p class="text-muted mb-4">
+                        Can't find what you're looking for? Our support team is here to help.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="/contact" class="btn btn-primary">
+                            <i class="fas fa-envelope me-2"></i>Contact Support
+                        </a>
+                        <button class="btn btn-outline-primary" onclick="startLiveChat()">
+                            <i class="fas fa-comments me-2"></i>Start Live Chat
+                        </button>
+                    </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.help-icon {
+    width: 64px;
+    height: 64px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: var(--bs-primary);
+}
+
+.accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230d6efd'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+.search-form .form-control {
+    border-right: none;
+}
+
+.search-form .btn {
+    border-left: none;
+}
+
+.search-form .form-control:focus {
+    border-color: var(--bs-border-color);
+    box-shadow: none;
+}
+
+.search-form .form-control:focus + .btn {
+    border-color: var(--bs-primary);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality
+    window.searchHelp = function() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        let found = false;
+
+        accordionItems.forEach(item => {
+            const question = item.querySelector('.accordion-button').textContent.toLowerCase();
+            const answer = item.querySelector('.accordion-body').textContent.toLowerCase();
+            const shouldShow = question.includes(searchTerm) || answer.includes(searchTerm);
+            
+            item.style.display = shouldShow ? 'block' : 'none';
+            if (shouldShow) {
+                found = true;
+                // Expand the item if it contains the search term
+                const collapse = item.querySelector('.accordion-collapse');
+                if (collapse) {
+                    new bootstrap.Collapse(collapse, { toggle: false }).show();
+                }
+            }
+        });
+
+        // Show message if no results found
+        const noResults = document.getElementById('noResults');
+        if (!found) {
+            if (!noResults) {
+                const message = document.createElement('div');
+                message.id = 'noResults';
+                message.className = 'alert alert-info mt-3';
+                message.innerHTML = '<i class="fas fa-info-circle me-2"></i>No results found. Try different keywords or contact support.';
+                document.querySelector('.search-form').after(message);
+            }
+        } else if (noResults) {
+            noResults.remove();
+        }
+    };
+
+    // Live chat function (to be implemented)
+    window.startLiveChat = function() {
+        alert('Live chat feature coming soon!');
+    };
+
+    // Handle search on Enter key
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchHelp();
+        }
+    });
+});
+</script>
+{% endblock %} 

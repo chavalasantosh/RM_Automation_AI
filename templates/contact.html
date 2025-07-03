@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">Contact Us</h1>
+                <p class="lead text-muted">
+                    Have questions? We're here to help. Choose the best way to reach us below.
+                </p>
+            </div>
+
+            <!-- Contact Methods -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="contact-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                                <i class="fas fa-envelope fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-3">Email Us</h3>
+                            <p class="text-muted mb-3">
+                                Send us an email and we'll get back to you within 24 hours.
+                            </p>
+                            <a href="mailto:support@resumematchengine.com" class="btn btn-outline-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Send Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="contact-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                                <i class="fas fa-phone fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-3">Call Us</h3>
+                            <p class="text-muted mb-3">
+                                Our support team is available Monday to Friday, 9 AM - 6 PM EST.
+                            </p>
+                            <a href="tel:+15551234567" class="btn btn-outline-primary">
+                                <i class="fas fa-phone-alt me-2"></i>+1 (555) 123-4567
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="contact-icon bg-primary bg-gradient text-white rounded-circle mb-3">
+                                <i class="fas fa-comments fa-2x"></i>
+                            </div>
+                            <h3 class="h5 mb-3">Live Chat</h3>
+                            <p class="text-muted mb-3">
+                                Chat with our support team in real-time for immediate assistance.
+                            </p>
+                            <button class="btn btn-outline-primary" onclick="startLiveChat()">
+                                <i class="fas fa-comment-dots me-2"></i>Start Chat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="card border-0 shadow-sm mb-5">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-4">Send us a Message</h2>
+                    
+                    {% if success %}
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Thank you for your message! We'll get back to you soon.
+                    </div>
+                    {% endif %}
+
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        {{ error }}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="/contact" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <!-- Name -->
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" required
+                                       value="{{ form.name if form else '' }}"
+                                       placeholder="Enter your full name">
+                                <div class="invalid-feedback">
+                                    Please enter your name.
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" name="email" required
+                                       value="{{ form.email if form else '' }}"
+                                       placeholder="Enter your email address">
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="col-12">
+                                <label for="subject" class="form-label">Subject <span class="text-danger">*</span></label>
+                                <select class="form-select" id="subject" name="subject" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="general" {% if form and form.subject == 'general' %}selected{% endif %}>
+                                        General Inquiry
+                                    </option>
+                                    <option value="support" {% if form and form.subject == 'support' %}selected{% endif %}>
+                                        Technical Support
+                                    </option>
+                                    <option value="billing" {% if form and form.subject == 'billing' %}selected{% endif %}>
+                                        Billing Question
+                                    </option>
+                                    <option value="feedback" {% if form and form.subject == 'feedback' %}selected{% endif %}>
+                                        Feedback
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a subject.
+                                </div>
+                            </div>
+
+                            <!-- Message -->
+                            <div class="col-12">
+                                <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required
+                                          placeholder="Enter your message here...">{{ form.message if form else '' }}</textarea>
+                                <div class="invalid-feedback">
+                                    Please enter your message.
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Office Locations -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-4">Our Offices</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <i class="fas fa-map-marker-alt text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">New York Office</h3>
+                                    <p class="text-muted mb-1">123 Tech Street</p>
+                                    <p class="text-muted mb-1">New York, NY 10001</p>
+                                    <p class="text-muted mb-0">United States</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <i class="fas fa-map-marker-alt text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">London Office</h3>
+                                    <p class="text-muted mb-1">45 Innovation Road</p>
+                                    <p class="text-muted mb-1">London, EC2A 4BX</p>
+                                    <p class="text-muted mb-0">United Kingdom</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.contact-icon {
+    width: 64px;
+    height: 64px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.fa-2x {
+    width: 2rem;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: var(--bs-success-bg-subtle);
+    border-color: var(--bs-success-border-subtle);
+    color: var(--bs-success);
+}
+
+.alert-danger {
+    background-color: var(--bs-danger-bg-subtle);
+    border-color: var(--bs-danger-border-subtle);
+    color: var(--bs-danger);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+
+    // Live chat function (to be implemented)
+    window.startLiveChat = function() {
+        alert('Live chat feature coming soon!');
+    };
+});
+</script>
+{% endblock %} 

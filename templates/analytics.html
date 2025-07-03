@@ -1,0 +1,1056 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - RME Enterprise AI Platform{% endblock %}
+
+{% block body_class %}analytics-page{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Analytics Page Styles */
+.analytics-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.analytics-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.analytics-card .card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.metric-card {
+    background: linear-gradient(45deg, var(--bs-primary), var(--bs-info));
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.metric-card .metric-icon {
+    position: absolute;
+    right: -1rem;
+    bottom: -1rem;
+    font-size: 5rem;
+    opacity: 0.1;
+    transform: rotate(-15deg);
+}
+
+.metric-card .metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.metric-card .metric-label {
+    font-size: 0.875rem;
+    opacity: 0.8;
+}
+
+.metric-card .metric-trend {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.trend-up {
+    background-color: rgba(25, 135, 84, 0.2);
+    color: #198754;
+}
+
+.trend-down {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+}
+
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px;
+}
+
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    margin: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.skill-tag.high-demand {
+    background-color: var(--bs-danger-bg-subtle);
+    color: var(--bs-danger);
+}
+
+.skill-tag.medium-demand {
+    background-color: var(--bs-warning-bg-subtle);
+    color: var(--bs-warning);
+}
+
+.skill-tag.low-demand {
+    background-color: var(--bs-success-bg-subtle);
+    color: var(--bs-success);
+}
+
+.timeline-chart {
+    position: relative;
+    height: 200px;
+}
+
+.timeline-chart .chart-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--bs-gray-200);
+}
+
+.timeline-chart .chart-point {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    border: 2px solid var(--bs-white);
+    transform: translate(-50%, 50%);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.timeline-chart .chart-point:hover {
+    transform: translate(-50%, 50%) scale(1.2);
+}
+
+.timeline-chart .chart-label {
+    position: absolute;
+    bottom: -1.5rem;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--bs-gray-600);
+    white-space: nowrap;
+}
+
+.report-card {
+    border: 1px solid var(--bs-gray-200);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.report-card:hover {
+    background-color: var(--bs-gray-100);
+    cursor: pointer;
+}
+
+.report-card .report-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.25rem;
+}
+
+.report-card .report-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.report-card .report-meta {
+    font-size: 0.875rem;
+    color: var(--bs-gray-600);
+}
+
+.filter-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    margin: 0.25rem;
+    background-color: var(--bs-gray-100);
+    color: var(--bs-gray-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tag:hover {
+    background-color: var(--bs-gray-200);
+}
+
+.filter-tag.active {
+    background-color: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+.filter-tag .remove-icon {
+    margin-left: 0.5rem;
+    opacity: 0.5;
+}
+
+.filter-tag:hover .remove-icon {
+    opacity: 1;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .analytics-page {
+        padding: 0 !important;
+    }
+    
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    .chart-container {
+        height: 200px !important;
+    }
+}
+
+/* Loading Skeletons */
+.loading-skeleton {
+    background: linear-gradient(90deg, var(--bs-gray-200) 25%, var(--bs-gray-100) 50%, var(--bs-gray-200) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 1rem;
+    min-height: 120px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Error State */
+.error-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--bs-danger);
+}
+
+.error-state i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.error-state .retry-button {
+    margin-top: 1rem;
+}
+
+/* Real-time Badge */
+.real-time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bs-success-bg-subtle);
+    color: var(--bs-success);
+    border-radius: 1rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="mb-2">Analytics Dashboard</h1>
+                    <p class="text-secondary mb-0">Comprehensive insights into your matching system's performance</p>
+                </div>
+                <div class="d-flex gap-2 no-print">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="mdi mdi-calendar-range me-2"></i>Date Range
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="setDateRange('today')">Today</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setDateRange('week')">This Week</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setDateRange('month')">This Month</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setDateRange('quarter')">This Quarter</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="setDateRange('year')">This Year</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#customDateModal">Custom Range</a></li>
+                        </ul>
+                    </div>
+                    <span class="real-time-badge"><i class="mdi mdi-flash"></i>Live</span>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#generateReportModal">
+                        <i class="mdi mdi-file-chart me-2"></i>Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row mb-4" id="metricsRow">
+        <div class="col-md-3">
+            <div class="card metric-card loading-skeleton" id="totalMatchesSkeleton"></div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card loading-skeleton" id="matchSuccessRateSkeleton"></div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card loading-skeleton" id="avgProcessingTimeSkeleton"></div>
+        </div>
+        <div class="col-md-3">
+            <div class="card metric-card loading-skeleton" id="activeJobsSkeleton"></div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <!-- Match Distribution -->
+        <div class="col-md-6">
+            <div class="card analytics-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Match Distribution</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="exportChart('matchDistribution', 'png')">Export as PNG</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="exportChart('matchDistribution', 'pdf')">Export as PDF</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container loading" id="matchDistributionChartContainer">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Match Trends -->
+        <div class="col-md-6">
+            <div class="card analytics-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Match Trends</h5>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary active" onclick="updateTrendChart('daily')">Daily</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="updateTrendChart('weekly')">Weekly</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="updateTrendChart('monthly')">Monthly</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container loading" id="matchTrendsChartContainer">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Analysis -->
+    <div class="row mb-4">
+        <!-- Skills Demand -->
+        <div class="col-md-8">
+            <div class="card analytics-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Skills Demand Analysis</h5>
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" class="form-control form-control-sm" placeholder="Search skills..." id="skillsSearch">
+                        <button class="btn btn-sm btn-outline-secondary" type="button">
+                            <i class="mdi mdi-magnify"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container loading" id="skillsDemandChartContainer">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="mt-3" id="topSkills">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidate Pool -->
+        <div class="col-md-4">
+            <div class="card analytics-card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Candidate Pool Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container loading" id="candidatePoolChartContainer">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Experience Distribution</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reports Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card analytics-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Recent Reports</h5>
+                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generateReportModal">
+                        <i class="mdi mdi-plus me-1"></i>New Report
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="recentReports">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State Template -->
+    <template id="errorStateTemplate">
+        <div class="error-state">
+            <i class="mdi mdi-alert-circle"></i>
+            <div class="error-message"></div>
+            <button class="btn btn-primary retry-button" onclick="retryAnalyticsLoading()">
+                <i class="mdi mdi-refresh"></i> Try Again
+            </button>
+        </div>
+    </template>
+</div>
+
+<!-- Custom Date Range Modal -->
+<div class="modal fade" id="customDateModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Date Range</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="customDateForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" name="startDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" name="endDate" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Compare With</label>
+                        <select class="form-select" name="compareWith">
+                            <option value="">No comparison</option>
+                            <option value="previous">Previous period</option>
+                            <option value="lastYear">Same period last year</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="customDateForm" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Generate Report Modal -->
+<div class="modal fade" id="generateReportModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Generate Report</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="generateReportForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Report Type</label>
+                            <select class="form-select" name="reportType" required>
+                                <option value="performance">Performance Report</option>
+                                <option value="skills">Skills Analysis Report</option>
+                                <option value="candidates">Candidate Pool Report</option>
+                                <option value="jobs">Job Market Report</option>
+                                <option value="custom">Custom Report</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date Range</label>
+                            <select class="form-select" name="dateRange" required>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Include Sections</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="includeMetrics" checked>
+                                    <label class="form-check-label">Key Metrics</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="includeCharts" checked>
+                                    <label class="form-check-label">Charts & Graphs</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="includeAnalysis" checked>
+                                    <label class="form-check-label">Detailed Analysis</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="includeRecommendations" checked>
+                                    <label class="form-check-label">Recommendations</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Export Format</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exportFormat" value="pdf" checked>
+                                    <label class="form-check-label">
+                                        <i class="mdi mdi-file-pdf-box me-1"></i>PDF
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exportFormat" value="excel">
+                                    <label class="form-check-label">
+                                        <i class="mdi mdi-file-excel me-1"></i>Excel
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exportFormat" value="powerpoint">
+                                    <label class="form-check-label">
+                                        <i class="mdi mdi-file-powerpoint me-1"></i>PowerPoint
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="generateReportForm" class="btn btn-primary">Generate Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize analytics
+    initializeAnalytics();
+    
+    // Load analytics data
+    loadAnalyticsData();
+});
+
+// Initialize analytics
+function initializeAnalytics() {
+    // Initialize charts
+    initializeCharts();
+    
+    // Initialize forms
+    initializeForms();
+    
+    // Initialize search
+    initializeSearch();
+}
+
+// Initialize charts
+function initializeCharts() {
+    // Match Distribution Chart
+    const matchDistributionCtx = document.getElementById('matchDistributionChart').getContext('2d');
+    window.matchDistributionChart = new Chart(matchDistributionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['High Match', 'Medium Match', 'Low Match', 'No Match'],
+            datasets: [{
+                data: [0, 0, 0, 0],
+                backgroundColor: [
+                    '#198754',
+                    '#0dcaf0',
+                    '#ffc107',
+                    '#dc3545'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    // Match Trends Chart
+    const matchTrendsCtx = document.getElementById('matchTrendsChart').getContext('2d');
+    window.matchTrendsChart = new Chart(matchTrendsCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Matches',
+                data: [],
+                borderColor: '#0d6efd',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+    // Skills Demand Chart
+    const skillsDemandCtx = document.getElementById('skillsDemandChart').getContext('2d');
+    window.skillsDemandChart = new Chart(skillsDemandCtx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Demand',
+                data: [],
+                backgroundColor: '#0d6efd'
+            }, {
+                label: 'Supply',
+                data: [],
+                backgroundColor: '#198754'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+    // Candidate Pool Chart
+    const candidatePoolCtx = document.getElementById('candidatePoolChart').getContext('2d');
+    window.candidatePoolChart = new Chart(candidatePoolCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Active', 'Shortlisted', 'Hired', 'Rejected'],
+            datasets: [{
+                data: [0, 0, 0, 0],
+                backgroundColor: [
+                    '#0d6efd',
+                    '#198754',
+                    '#ffc107',
+                    '#dc3545'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    
+    // Experience Distribution Chart
+    const experienceDistributionCtx = document.getElementById('experienceDistributionChart').getContext('2d');
+    window.experienceDistributionChart = new Chart(experienceDistributionCtx, {
+        type: 'bar',
+        data: {
+            labels: ['0-2', '2-5', '5-10', '10+'],
+            datasets: [{
+                label: 'Years of Experience',
+                data: [0, 0, 0, 0],
+                backgroundColor: '#0d6efd'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Initialize forms
+function initializeForms() {
+    // Custom date form
+    const customDateForm = document.getElementById('customDateForm');
+    if (customDateForm) {
+        customDateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await applyCustomDateRange();
+        });
+    }
+    
+    // Generate report form
+    const generateReportForm = document.getElementById('generateReportForm');
+    if (generateReportForm) {
+        generateReportForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await generateReport();
+        });
+    }
+}
+
+// Initialize search
+function initializeSearch() {
+    const skillsSearch = document.getElementById('skillsSearch');
+    if (skillsSearch) {
+        skillsSearch.addEventListener('input', debounce(async (e) => {
+            await searchSkills(e.target.value);
+        }, 300));
+    }
+}
+
+// Load analytics data
+async function loadAnalyticsData() {
+    try {
+        // Show loading skeletons
+        document.querySelectorAll('.loading-skeleton').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.chart-container').forEach(el => el.classList.add('loading'));
+        // Fetch and update metrics
+        const metrics = await API.request('/api/analytics/metrics');
+        updateMetrics(metrics);
+        // Fetch and update charts
+        const matchDist = await API.request('/api/analytics/match-distribution');
+        updateMatchDistributionChart(matchDist);
+        const matchTrends = await API.request('/api/analytics/match-trends');
+        updateMatchTrendsChart(matchTrends);
+        const skillsDemand = await API.request('/api/analytics/skills-demand');
+        updateSkillsDemandChart(skillsDemand);
+        const candidatePool = await API.request('/api/analytics/candidate-pool');
+        updateCandidatePoolChart(candidatePool);
+        // Hide loading skeletons
+        document.querySelectorAll('.loading-skeleton').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.chart-container').forEach(el => el.classList.remove('loading'));
+    } catch (error) {
+        showAnalyticsError('Failed to load analytics data. Please try again.');
+    }
+}
+
+// Update metrics
+function updateMetrics(metrics) {
+    document.getElementById('totalMatches').textContent = metrics.totalMatches.toLocaleString();
+    document.getElementById('matchSuccessRate').textContent = `${metrics.matchSuccessRate}%`;
+    document.getElementById('avgProcessingTime').textContent = `${metrics.avgProcessingTime} min`;
+    document.getElementById('activeJobs').textContent = metrics.activeJobs.toLocaleString();
+}
+
+// Update charts
+function updateCharts(charts) {
+    // Update match distribution
+    window.matchDistributionChart.data.datasets[0].data = charts.matchDistribution;
+    window.matchDistributionChart.update();
+    
+    // Update match trends
+    window.matchTrendsChart.data.labels = charts.matchTrends.labels;
+    window.matchTrendsChart.data.datasets[0].data = charts.matchTrends.data;
+    window.matchTrendsChart.update();
+    
+    // Update skills demand
+    window.skillsDemandChart.data.labels = charts.skillsDemand.labels;
+    window.skillsDemandChart.data.datasets[0].data = charts.skillsDemand.demand;
+    window.skillsDemandChart.data.datasets[1].data = charts.skillsDemand.supply;
+    window.skillsDemandChart.update();
+    
+    // Update candidate pool
+    window.candidatePoolChart.data.datasets[0].data = charts.candidatePool;
+    window.candidatePoolChart.update();
+    
+    // Update experience distribution
+    window.experienceDistributionChart.data.datasets[0].data = charts.experienceDistribution;
+    window.experienceDistributionChart.update();
+}
+
+// Update skills analysis
+function updateSkillsAnalysis(skills) {
+    const container = document.getElementById('topSkills');
+    container.innerHTML = skills.topSkills.map(skill => `
+        <div class="skill-tag ${getSkillDemandClass(skill.demand)}">
+            <i class="mdi mdi-tag me-1"></i>${skill.name}
+            <span class="ms-1">${skill.count}</span>
+        </div>
+    `).join('');
+}
+
+// Update recent reports
+function updateRecentReports(reports) {
+    const container = document.getElementById('recentReports');
+    container.innerHTML = reports.map(report => `
+        <div class="col-md-4">
+            <div class="report-card" onclick="viewReport('${report.id}')">
+                <div class="d-flex align-items-center">
+                    <div class="report-icon bg-${getReportTypeColor(report.type)} bg-opacity-10 text-${getReportTypeColor(report.type)} me-3">
+                        <i class="mdi ${getReportTypeIcon(report.type)}"></i>
+                    </div>
+                    <div>
+                        <div class="report-title">${report.title}</div>
+                        <div class="report-meta">
+                            <i class="mdi mdi-calendar me-1"></i>${formatDate(report.createdAt)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Set date range
+function setDateRange(range) {
+    // TODO: Implement date range selection
+    loadAnalyticsData();
+}
+
+// Apply custom date range
+async function applyCustomDateRange() {
+    try {
+        const formData = new FormData(document.getElementById('customDateForm'));
+        const data = Object.fromEntries(formData.entries());
+        
+        await API.request('/api/analytics/date-range', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        
+        bootstrap.Modal.getInstance(document.getElementById('customDateModal')).hide();
+        loadAnalyticsData();
+    } catch (error) {
+        console.error('Failed to apply date range:', error);
+        Toast.show('Failed to apply date range', 'error');
+    }
+}
+
+// Generate report
+async function generateReport() {
+    try {
+        const formData = new FormData(document.getElementById('generateReportForm'));
+        const data = Object.fromEntries(formData.entries());
+        
+        const response = await API.request('/api/analytics/reports', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        
+        // Download the report
+        const blob = new Blob([response.data], { type: response.type });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = response.filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        bootstrap.Modal.getInstance(document.getElementById('generateReportModal')).hide();
+        Toast.show('Report generated successfully', 'success');
+        loadAnalyticsData();
+    } catch (error) {
+        console.error('Failed to generate report:', error);
+        Toast.show('Failed to generate report', 'error');
+    }
+}
+
+// Search skills
+async function searchSkills(query) {
+    try {
+        const response = await API.request(`/api/analytics/skills/search?q=${encodeURIComponent(query)}`);
+        updateSkillsAnalysis(response);
+    } catch (error) {
+        console.error('Failed to search skills:', error);
+        Toast.show('Failed to search skills', 'error');
+    }
+}
+
+// Update trend chart
+function updateTrendChart(period) {
+    // TODO: Implement trend chart update
+    loadAnalyticsData();
+}
+
+// Export chart
+async function exportChart(chartId, format) {
+    try {
+        const chart = window[`${chartId}Chart`];
+        const url = chart.toDataURL(`image/${format}`);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${chartId}.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    } catch (error) {
+        console.error('Failed to export chart:', error);
+        Toast.show('Failed to export chart', 'error');
+    }
+}
+
+// View report
+function viewReport(reportId) {
+    window.location.href = `/analytics/reports/${reportId}`;
+}
+
+// Helper functions
+function getSkillDemandClass(demand) {
+    if (demand >= 80) return 'high-demand';
+    if (demand >= 50) return 'medium-demand';
+    return 'low-demand';
+}
+
+function getReportTypeColor(type) {
+    const colors = {
+        'performance': 'primary',
+        'skills': 'success',
+        'candidates': 'info',
+        'jobs': 'warning',
+        'custom': 'secondary'
+    };
+    return colors[type] || 'secondary';
+}
+
+function getReportTypeIcon(type) {
+    const icons = {
+        'performance': 'mdi-chart-line',
+        'skills': 'mdi-brain',
+        'candidates': 'mdi-account-group',
+        'jobs': 'mdi-briefcase',
+        'custom': 'mdi-file-document'
+    };
+    return icons[type] || 'mdi-file-document';
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showAnalyticsError(message) {
+    const template = document.getElementById('errorStateTemplate');
+    const errorState = template.content.cloneNode(true);
+    errorState.querySelector('.error-message').textContent = message;
+    // Replace all main containers with error state
+    document.querySelectorAll('.chart-container, #metricsRow').forEach(container => {
+        container.innerHTML = '';
+        container.appendChild(errorState.cloneNode(true));
+    });
+}
+
+function retryAnalyticsLoading() {
+    loadAnalyticsData();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadAnalyticsData();
+    setInterval(loadAnalyticsData, 60000); // Refresh every 60s
+});
+</script>
+{% endblock %} 

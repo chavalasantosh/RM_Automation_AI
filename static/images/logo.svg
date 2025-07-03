@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Shape -->
+    <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    
+    <!-- Logo Icon -->
+    <g transform="translate(10, 5)">
+        <!-- Abstract R shape -->
+        <path d="M15,0 C23.284,0 30,6.716 30,15 C30,23.284 23.284,30 15,30 L0,30 L0,0 L15,0 Z M15,5 L5,5 L5,25 L15,25 C20.523,25 25,20.523 25,15 C25,9.477 20.523,5 15,5 Z" 
+              fill="url(#logoGradient)"/>
+        <!-- Diagonal line -->
+        <path d="M5,15 L20,30" stroke="url(#logoGradient)" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Text -->
+    <g transform="translate(45, 25)" font-family="Arial, sans-serif" font-weight="bold">
+        <text font-size="24" fill="#1F2937">RME</text>
+        <text x="70" font-size="16" fill="#6B7280">Enterprise AI</text>
+    </g>
+</svg> 

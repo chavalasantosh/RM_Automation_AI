@@ -1,0 +1,49 @@
+{
+    "name": "Sarah Johnson",
+    "skills": [
+        "Python",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "SQL",
+        "Git",
+        "Docker",
+        "AWS",
+        "TypeScript",
+        "MongoDB",
+        "GraphQL",
+        "Redux",
+        "Jest"
+    ],
+    "years_of_experience": 4,
+    "certifications": [
+        "AWS Certified Developer"
+    ],
+    "education_level": "Bachelor's in Computer Science",
+    "availability": "Full-time",
+    "current_role": "Software Engineer",
+    "previous_roles": [
+        {
+            "title": "Frontend Developer",
+            "company": "Web Solutions",
+            "duration": "2 years"
+        },
+        {
+            "title": "Junior Developer",
+            "company": "Digital Creations",
+            "duration": "1 year"
+        }
+    ],
+    "projects": [
+        {
+            "name": "Real-time Chat Application",
+            "description": "Developed a real-time chat application using WebSocket and React",
+            "technologies": ["React", "Node.js", "WebSocket", "MongoDB"]
+        },
+        {
+            "name": "E-commerce Frontend",
+            "description": "Built responsive frontend for an e-commerce platform",
+            "technologies": ["React", "Redux", "TypeScript", "Jest"]
+        }
+    ]
+} 

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Job Matches - Resume Matching Engine</title>
+    <style>
+        /* Reset styles */
+        body, p, h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Email wrapper */
+        .email-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background-color: #007bff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 40px 20px;
+        }
+        
+        .notification-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Match summary */
+        .match-summary {
+            background-color: #e7f5ff;
+            border: 1px solid #b8daff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .match-summary h3 {
+            color: #004085;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .match-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            flex: 1;
+            padding: 0 10px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        /* Job details */
+        .job-details {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .job-details h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .job-info {
+            margin-bottom: 15px;
+        }
+        
+        .job-label {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .job-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        /* Top matches */
+        .top-matches {
+            margin: 30px 0;
+        }
+        
+        .match-card {
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .match-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .match-score {
+            background-color: #28a745;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .match-details {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .match-tags {
+            margin-top: 10px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        /* Button */
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .button:hover {
+            background-color: #0056b3;
+        }
+        
+        .button-secondary {
+            background-color: #6c757d;
+        }
+        
+        .button-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 30px 0;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive design */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 30px 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .notification-text {
+                font-size: 16px;
+            }
+            
+            .match-stats {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                margin-bottom: 15px;
+            }
+            
+            .button {
+                display: block;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-wrapper">
+            <!-- Header -->
+            <div class="header">
+                <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+                <h1>New Job Matches Found!</h1>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <p class="notification-text">
+                    Hello {{ user.first_name }},<br>
+                    We've found {{ total_matches }} new candidates matching your job posting.
+                </p>
+                
+                <!-- Match Summary -->
+                <div class="match-summary">
+                    <h3>Match Summary</h3>
+                    
+                    <div class="match-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_matches }}</div>
+                            <div class="stat-label">Total Matches</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-number">{{ high_matches }}</div>
+                            <div class="stat-label">High Matches</div>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <div class="stat-number">{{ new_matches }}</div>
+                            <div class="stat-label">New Today</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Details -->
+                <div class="job-details">
+                    <h3>Job Details</h3>
+                    
+                    <div class="job-info">
+                        <div class="job-label">Position</div>
+                        <div class="job-value">{{ job.title }}</div>
+                    </div>
+                    
+                    <div class="job-info">
+                        <div class="job-label">Location</div>
+                        <div class="job-value">{{ job.location }}</div>
+                    </div>
+                    
+                    <div class="job-info">
+                        <div class="job-label">Posted Date</div>
+                        <div class="job-value">{{ job.posted_date }}</div>
+                    </div>
+                    
+                    <div class="job-info">
+                        <div class="job-label">Key Requirements</div>
+                        <div class="job-value">{{ job.requirements|join(', ') }}</div>
+                    </div>
+                </div>
+                
+                <!-- Top Matches -->
+                <div class="top-matches">
+                    <h3>Top Matches</h3>
+                    
+                    {% for match in top_matches %}
+                    <div class="match-card">
+                        <div class="match-header">
+                            <div class="match-name">{{ match.name }}</div>
+                            <div class="match-score">{{ match.score }}% Match</div>
+                        </div>
+                        
+                        <div class="match-details">
+                            <p>
+                                <strong>Experience:</strong> {{ match.experience }}<br>
+                                <strong>Location:</strong> {{ match.location }}<br>
+                                <strong>Availability:</strong> {{ match.availability }}
+                            </p>
+                            
+                            <div class="match-tags">
+                                {% for skill in match.skills %}
+                                <span class="tag">{{ skill }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{{ view_matches_url }}" class="button">View All Matches</a>
+                    <a href="{{ job_url }}" class="button button-secondary">View Job Details</a>
+                </div>
+                
+                <!-- Additional Information -->
+                <div class="job-details">
+                    <h3>Need Help?</h3>
+                    <p>
+                        Our AI matching system continuously analyzes new resumes. You'll receive updates 
+                        as new candidates match your criteria. To adjust your matching preferences, 
+                        visit your <a href="{{ settings_url }}">account settings</a>.
+                    </p>
+                    <p style="margin-top: 15px;">
+                        For assistance with candidate screening or hiring process, contact our 
+                        <a href="{{ support_url }}">support team</a>.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="divider"></div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>
+                    © {{ current_year }} Resume Matching Engine. All rights reserved.<br>
+                    <small>
+                        This email was sent to {{ user.email }}. 
+                        To manage your email preferences, 
+                        <a href="{{ preferences_url }}">click here</a>.
+                    </small>
+                </p>
+                
+                <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                    To ensure delivery to your inbox, please add <strong>noreply@resumematcher.com</strong> to your address book.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

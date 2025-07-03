@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Settings Navigation -->
+        <div class="col-md-3 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <a href="#profile" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a>
+                        <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-shield-alt me-2"></i>Security
+                        </a>
+                        <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-bell me-2"></i>Notifications
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body">
+                    <h5 class="card-title text-danger mb-3">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Danger Zone
+                    </h5>
+                    <button type="button" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                        <i class="fas fa-trash-alt me-2"></i>Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Profile Settings -->
+                <div class="tab-pane fade show active" id="profile">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h2 class="h4 mb-4">Profile Settings</h2>
+                            <form method="POST" action="{{ url_for('user.update_profile') }}" class="needs-validation" novalidate>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" 
+                                               value="{{ current_user.first_name }}" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" 
+                                               value="{{ current_user.last_name }}" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                               value="{{ current_user.email }}" required readonly>
+                                        <div class="form-text">Email cannot be changed. Contact support if needed.</div>
+                                </div>
+                                    <div class="col-12">
+                                        <label for="company" class="form-label">Company/Organization</label>
+                                        <input type="text" class="form-control" id="company" name="company" 
+                                               value="{{ current_user.company }}" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="jobTitle" class="form-label">Job Title</label>
+                                        <input type="text" class="form-control" id="jobTitle" name="jobTitle" 
+                                               value="{{ current_user.job_title }}" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save me-2"></i>Save Changes
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h2 class="h4 mb-4">Security Settings</h2>
+                            
+                            <!-- Change Password -->
+                            <form method="POST" action="{{ url_for('user.change_password') }}" class="mb-4 needs-validation" novalidate>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <h5 class="h6 mb-3">Change Password</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="currentPassword" class="form-label">Current Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="currentPassword" 
+                                                   name="current_password" required>
+                                            <button class="btn btn-outline-secondary" type="button" 
+                                                    onclick="togglePassword('currentPassword')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                    </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="newPassword" class="form-label">New Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="newPassword" 
+                                                   name="new_password" required minlength="8">
+                                            <button class="btn btn-outline-secondary" type="button" 
+                                                    onclick="togglePassword('newPassword')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                    </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="password-strength mt-2" id="passwordStrength">
+                                            <div class="progress" style="height: 5px;">
+                                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                            <small class="text-muted" id="strengthText">Password strength: Too weak</small>
+                                    </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-key me-2"></i>Update Password
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Active Sessions -->
+                            <div class="card bg-light border-0">
+                        <div class="card-body">
+                                    <h5 class="h6 mb-3">Active Sessions</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Device</th>
+                                                    <th>Location</th>
+                                                    <th>Last Active</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for session in active_sessions %}
+                                                <tr>
+                                                    <td>{{ session.device }}</td>
+                                                    <td>{{ session.location }}</td>
+                                                    <td>{{ session.last_active }}</td>
+                                                    <td>
+                                                        {% if not session.current %}
+                                                        <button class="btn btn-sm btn-outline-danger" 
+                                                                onclick="revokeSession('{{ session.id }}')">
+                                                            Revoke
+                                                        </button>
+                                                        {% else %}
+                                                        <span class="badge bg-success">Current</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="tab-pane fade" id="notifications">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h2 class="h4 mb-4">Notification Settings</h2>
+                            <form method="POST" action="{{ url_for('user.update_notifications') }}" class="needs-validation" novalidate>
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                
+                                <!-- Email Notifications -->
+                                <div class="mb-4">
+                                    <h5 class="h6 mb-3">Email Notifications</h5>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="emailMatches" name="email_matches" 
+                                               {% if notifications.email_matches %}checked{% endif %}>
+                                        <label class="form-check-label" for="emailMatches">
+                                            New matches found
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="emailUpdates" name="email_updates" 
+                                               {% if notifications.email_updates %}checked{% endif %}>
+                                        <label class="form-check-label" for="emailUpdates">
+                                            System updates and announcements
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="emailMarketing" name="email_marketing" 
+                                               {% if notifications.email_marketing %}checked{% endif %}>
+                                        <label class="form-check-label" for="emailMarketing">
+                                            Marketing communications
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- In-App Notifications -->
+                                <div class="mb-4">
+                                    <h5 class="h6 mb-3">In-App Notifications</h5>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="appMatches" name="app_matches" 
+                                               {% if notifications.app_matches %}checked{% endif %}>
+                                        <label class="form-check-label" for="appMatches">
+                                            New matches found
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-switch mb-2">
+                                        <input class="form-check-input" type="checkbox" id="appUpdates" name="app_updates" 
+                                               {% if notifications.app_updates %}checked{% endif %}>
+                                        <label class="form-check-label" for="appUpdates">
+                                            System updates
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="appReminders" name="app_reminders" 
+                                               {% if notifications.app_reminders %}checked{% endif %}>
+                                        <label class="form-check-label" for="appReminders">
+                                            Reminders and alerts
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Save Notification Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    This action cannot be undone. All your data will be permanently deleted.
+                    </div>
+                <form method="POST" action="{{ url_for('user.delete_account') }}" id="deleteAccountForm">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="confirmDelete" class="form-label">Type "DELETE" to confirm</label>
+                        <input type="text" class="form-control" id="confirmDelete" required 
+                               pattern="DELETE" title="Please type DELETE to confirm">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deletePassword" class="form-label">Enter your password</label>
+                        <input type="password" class="form-control" id="deletePassword" name="password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="deleteAccountForm" class="btn btn-danger">
+                    <i class="fas fa-trash-alt me-2"></i>Delete Account
+                        </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.list-group-item {
+    border: none;
+    padding: 1rem;
+}
+
+.list-group-item.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.list-group-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.password-strength .progress {
+    background-color: #e9ecef;
+}
+
+.password-strength .progress-bar {
+    transition: width 0.3s ease;
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password strength checker
+    function checkPasswordStrength(password) {
+        let strength = 0;
+        const requirements = {
+            length: password.length >= 8,
+            letter: /[A-Za-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*]/.test(password)
+        };
+
+        if (requirements.length) strength += 25;
+        if (requirements.letter) strength += 25;
+        if (requirements.number) strength += 25;
+        if (requirements.special) strength += 25;
+
+        const progressBar = document.querySelector('.progress-bar');
+        const strengthText = document.getElementById('strengthText');
+
+        progressBar.style.width = strength + '%';
+        progressBar.className = 'progress-bar';
+
+        if (strength <= 25) {
+            progressBar.classList.add('bg-danger');
+            strengthText.textContent = 'Password strength: Too weak';
+        } else if (strength <= 50) {
+            progressBar.classList.add('bg-warning');
+            strengthText.textContent = 'Password strength: Weak';
+        } else if (strength <= 75) {
+            progressBar.classList.add('bg-info');
+            strengthText.textContent = 'Password strength: Good';
+        } else {
+            progressBar.classList.add('bg-success');
+            strengthText.textContent = 'Password strength: Strong';
+        }
+
+        return strength === 100;
+    }
+
+    // Password visibility toggle
+    window.togglePassword = function(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.nextElementSibling.querySelector('i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    };
+
+    // Password strength check on input
+    const newPassword = document.getElementById('newPassword');
+    if (newPassword) {
+        newPassword.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+    }
+
+    // Form validation
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+
+    // Session management
+    window.revokeSession = function(sessionId) {
+        if (confirm('Are you sure you want to revoke this session?')) {
+            // Implement session revocation logic
+        }
+    };
+});
+</script>
+{% endblock %} 

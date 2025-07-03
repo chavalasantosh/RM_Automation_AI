@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if job %}Edit Job{% else %}Add New Job{% endif %} - Resume Matching Engine
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/jobs">Jobs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% if job %}Edit Job{% else %}Add New Job{% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-4">
+                        {% if job %}
+                        <i class="fas fa-edit me-2"></i>Edit Job
+                        {% else %}
+                        <i class="fas fa-plus me-2"></i>Add New Job
+                        {% endif %}
+                    </h1>
+
+                    {% if error %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="{% if job %}/jobs/{{ job.id }}/edit{% else %}/jobs/add{% endif %}" class="needs-validation" novalidate>
+                        <!-- Job Title -->
+                        <div class="mb-4">
+                            <label for="title" class="form-label">Job Title <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   value="{{ job.title if job else '' }}" required
+                                   placeholder="e.g., Senior Software Engineer">
+                            <div class="invalid-feedback">
+                                Please enter a job title.
+                            </div>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="mb-4">
+                            <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                            <select class="form-select" id="department" name="department" required>
+                                <option value="">Select Department</option>
+                                {% for dept in departments %}
+                                <option value="{{ dept }}" {% if job and job.department == dept %}selected{% endif %}>
+                                    {{ dept }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a department.
+                            </div>
+                        </div>
+
+                        <!-- Job Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label">Job Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="description" name="description" rows="6" required
+                                      placeholder="Enter detailed job description...">{{ job.description if job else '' }}</textarea>
+                            <div class="invalid-feedback">
+                                Please enter a job description.
+                            </div>
+                        </div>
+
+                        <!-- Required Skills -->
+                        <div class="mb-4">
+                            <label class="form-label">Required Skills <span class="text-danger">*</span></label>
+                            <div class="skills-container mb-2">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="skillInput" 
+                                           placeholder="Type a skill and press Enter">
+                                    <button class="btn btn-outline-secondary" type="button" id="addSkill">
+                                        <i class="fas fa-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="skillsList" class="d-flex flex-wrap gap-2">
+                                {% if job and job.required_skills %}
+                                    {% for skill in job.required_skills %}
+                                    <div class="skill-badge">
+                                        <span>{{ skill }}</span>
+                                        <input type="hidden" name="skills[]" value="{{ skill }}">
+                                        <button type="button" class="btn-close btn-close-white" aria-label="Remove skill"></button>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-text">
+                                Add skills that are required for this position. Press Enter or click Add to add each skill.
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="isActive" name="is_active"
+                                       {% if not job or job.is_active %}checked{% endif %}>
+                                <label class="form-check-label" for="isActive">Active Job</label>
+                            </div>
+                            <div class="form-text">
+                                Active jobs will be included in the matching process.
+                            </div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Job
+                            </button>
+                            <a href="/jobs" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--bs-primary);
+    color: white;
+    border-radius: var(--bs-border-radius);
+    font-size: 0.875rem;
+}
+
+.skill-badge .btn-close {
+    font-size: 0.75rem;
+    opacity: 0.75;
+}
+
+.skill-badge .btn-close:hover {
+    opacity: 1;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const skillInput = document.getElementById('skillInput');
+    const addSkillBtn = document.getElementById('addSkill');
+    const skillsList = document.getElementById('skillsList');
+    const form = document.querySelector('form');
+
+    // Function to add a skill
+    function addSkill(skill) {
+        skill = skill.trim();
+        if (!skill) return;
+
+        // Check if skill already exists
+        const existingSkills = Array.from(skillsList.querySelectorAll('input[name="skills[]"]'))
+            .map(input => input.value.toLowerCase());
+        if (existingSkills.includes(skill.toLowerCase())) {
+            return;
+        }
+
+        // Create skill badge
+        const badge = document.createElement('div');
+        badge.className = 'skill-badge';
+        badge.innerHTML = `
+            <span>${skill}</span>
+            <input type="hidden" name="skills[]" value="${skill}">
+            <button type="button" class="btn-close btn-close-white" aria-label="Remove skill"></button>
+        `;
+
+        // Add remove functionality
+        badge.querySelector('.btn-close').addEventListener('click', function() {
+            badge.remove();
+        });
+
+        skillsList.appendChild(badge);
+        skillInput.value = '';
+    }
+
+    // Add skill on Enter key
+    skillInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addSkill(this.value);
+        }
+    });
+
+    // Add skill on button click
+    addSkillBtn.addEventListener('click', function() {
+        addSkill(skillInput.value);
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Check if at least one skill is added
+        const skills = skillsList.querySelectorAll('input[name="skills[]"]');
+        if (skills.length === 0) {
+            e.preventDefault();
+            alert('Please add at least one required skill.');
+            return;
+        }
+
+        form.classList.add('was-validated');
+    });
+
+    // Initialize existing skill badges with remove functionality
+    skillsList.querySelectorAll('.skill-badge .btn-close').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.closest('.skill-badge').remove();
+        });
+    });
+});
+</script>
+{% endblock %} 

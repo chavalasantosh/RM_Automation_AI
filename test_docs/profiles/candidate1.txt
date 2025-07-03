@@ -1,0 +1,28 @@
+John Doe
+Python Developer
+
+Skills:
+- Python (Expert)
+- Django (Advanced)
+- SQL (Advanced)
+- AWS (Intermediate)
+- Docker (Intermediate)
+- Kubernetes (Beginner)
+
+Experience:
+- 7 years of Python development
+- 5 years of web application development
+- 3 years of cloud platform experience
+
+Certifications:
+- AWS Certified Developer
+- Python Institute Certification
+- Docker Certified Associate
+
+Availability:
+- Available immediately
+- Prefers full-time
+- Open to remote work
+
+Summary:
+Experienced Python developer with a strong background in web development and cloud technologies. Led multiple successful projects using Django and AWS. Passionate about clean code and best practices. Strong problem-solving skills and ability to work in agile environments. 

@@ -1,0 +1,32 @@
+Name: Alex Chen
+
+Summary:
+Experienced ML engineer with expertise in deep learning and computer vision. Strong background in model optimization and deployment.
+
+Skills:
+- Python (Expert)
+- PyTorch (Advanced)
+- TensorFlow (Advanced)
+- Deep Learning (Expert)
+- Computer Vision (Advanced)
+- AWS (Advanced)
+- Google Cloud (Intermediate)
+- Docker (Advanced)
+- Kubernetes (Advanced)
+- MLOps (Advanced)
+
+Experience:
+- 8 years in machine learning and software development
+- Led multiple computer vision projects
+- Extensive experience with cloud platforms and containerization
+- Strong background in model optimization and deployment
+
+Certifications:
+- AWS Machine Learning Specialty
+- Google Cloud Professional ML Engineer
+- Deep Learning Specialization
+- Kubernetes Administrator
+
+Education:
+- Master's in Computer Science
+- Bachelor's in Computer Engineering 

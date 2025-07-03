@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">Privacy Policy</h1>
+                <p class="lead text-muted">Last updated: {{ last_updated|default('March 2024') }}</p>
+            </div>
+
+            <!-- Introduction -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Introduction</h2>
+                    <p>
+                        At Resume Matching Engine, we take your privacy seriously. This Privacy Policy explains how we collect, 
+                        use, disclose, and safeguard your information when you use our resume matching platform. Please read 
+                        this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do 
+                        not access the platform.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Information We Collect -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Information We Collect</h2>
+                    
+                    <h3 class="h5 mb-3">Personal Information</h3>
+                    <p>We may collect personal information that you voluntarily provide to us when you:</p>
+                    <ul class="list-unstyled ps-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            Register for an account
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            Upload resumes and job descriptions
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            Contact us for support
+                        </li>
+                    </ul>
+
+                    <h3 class="h5 mb-3 mt-4">Document Information</h3>
+                    <p>When you upload documents to our platform, we collect and process:</p>
+                    <ul class="list-unstyled ps-4">
+                        <li class="mb-2">
+                            <i class="fas fa-file-alt text-primary me-2"></i>
+                            Resume content and metadata
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-file-alt text-primary me-2"></i>
+                            Job description content
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-file-alt text-primary me-2"></i>
+                            Document timestamps and versions
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- How We Use Your Information -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">How We Use Your Information</h2>
+                    <p>We use the information we collect to:</p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-robot text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">AI Matching</h3>
+                                    <p class="small text-muted mb-0">
+                                        Process and analyze documents to provide accurate job-resume matches
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-chart-line text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Analytics</h3>
+                                    <p class="small text-muted mb-0">
+                                        Improve our matching algorithms and platform performance
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-shield-alt text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Security</h3>
+                                    <p class="small text-muted mb-0">
+                                        Protect your account and prevent unauthorized access
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-envelope text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Communication</h3>
+                                    <p class="small text-muted mb-0">
+                                        Send important updates and respond to your inquiries
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Security -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Data Security</h2>
+                    <p>
+                        We implement appropriate technical and organizational security measures to protect your personal 
+                        information. However, please note that no electronic transmission or storage of information can 
+                        be entirely secure.
+                    </p>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        We regularly review and update our security practices to ensure the safety of your data.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Rights -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Your Rights</h2>
+                    <p>You have the right to:</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-eye text-primary me-3"></i>
+                                <span>Access your personal information</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-edit text-primary me-3"></i>
+                                <span>Correct inaccurate data</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-trash-alt text-primary me-3"></i>
+                                <span>Request deletion of your data</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-download text-primary me-3"></i>
+                                <span>Export your data</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Contact Us</h2>
+                    <p>
+                        If you have any questions about this Privacy Policy, please contact us at:
+                    </p>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-envelope text-primary me-3"></i>
+                        <a href="mailto:privacy@resumematchengine.com" class="text-decoration-none">
+                            privacy@resumematchengine.com
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-phone text-primary me-3"></i>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.fa-2x {
+    width: 2rem;
+    text-align: center;
+}
+
+.alert-info {
+    background-color: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary-border-subtle);
+    color: var(--bs-primary);
+}
+</style>
+{% endblock %} 

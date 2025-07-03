@@ -1,0 +1,35 @@
+Title: Machine Learning Engineer
+
+Summary:
+We are seeking an experienced Machine Learning Engineer to join our team. The ideal candidate will have strong expertise in deep learning, computer vision, and cloud platforms.
+
+Required Skills:
+- Python (Advanced)
+- TensorFlow (Advanced)
+- PyTorch (Advanced)
+- Deep Learning (Advanced)
+- Computer Vision (Advanced)
+- Natural Language Processing (Advanced)
+- MLOps (Advanced)
+- CUDA (Advanced)
+
+Experience:
+- 5+ years of experience in machine learning
+- Strong background in deep learning and neural networks
+- Experience with computer vision and NLP
+- Knowledge of MLOps practices
+
+Certifications:
+- AWS Machine Learning Specialty
+- Google Cloud Professional ML Engineer
+- NVIDIA Deep Learning Institute
+
+Education:
+- Master's degree in Computer Science, Machine Learning, or related field
+
+Responsibilities:
+- Develop and deploy machine learning models
+- Implement computer vision solutions
+- Optimize model performance
+- Collaborate with cross-functional teams
+- Maintain and improve ML pipelines 

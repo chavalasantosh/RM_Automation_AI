@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">Terms of Service</h1>
+                <p class="lead text-muted">Last updated: {{ last_updated|default('March 2024') }}</p>
+            </div>
+
+            <!-- Introduction -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Agreement to Terms</h2>
+                    <p>
+                        By accessing and using the Resume Matching Engine platform, you agree to be bound by these Terms 
+                        of Service and all applicable laws and regulations. If you do not agree with any of these terms, 
+                        you are prohibited from using or accessing this platform.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Platform Usage -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Platform Usage</h2>
+                    
+                    <h3 class="h5 mb-3">Eligibility</h3>
+                    <div class="alert alert-primary">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You must be at least 18 years old and have the legal capacity to enter into these terms.
+                    </div>
+
+                    <h3 class="h5 mb-3 mt-4">Account Registration</h3>
+                    <p>When creating an account, you agree to:</p>
+                    <ul class="list-unstyled ps-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            Provide accurate and complete information
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            Maintain the security of your account
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-primary me-2"></i>
+                            Notify us of any unauthorized access
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- User Obligations -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">User Obligations</h2>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-shield-alt text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Data Protection</h3>
+                                    <p class="small text-muted mb-0">
+                                        Ensure all uploaded documents comply with data protection laws
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-user-shield text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Privacy</h3>
+                                    <p class="small text-muted mb-0">
+                                        Respect the privacy rights of individuals in uploaded documents
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-gavel text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Compliance</h3>
+                                    <p class="small text-muted mb-0">
+                                        Use the platform in accordance with all applicable laws
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-handshake text-primary fa-2x me-3"></i>
+                                <div>
+                                    <h3 class="h6 mb-2">Fair Use</h3>
+                                    <p class="small text-muted mb-0">
+                                        Use the platform responsibly and not for any illegal purposes
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prohibited Activities -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Prohibited Activities</h2>
+                    <p>You agree not to:</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center text-danger">
+                                <i class="fas fa-ban me-3"></i>
+                                <span>Upload malicious or harmful content</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center text-danger">
+                                <i class="fas fa-ban me-3"></i>
+                                <span>Attempt to breach platform security</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center text-danger">
+                                <i class="fas fa-ban me-3"></i>
+                                <span>Share account credentials</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center text-danger">
+                                <i class="fas fa-ban me-3"></i>
+                                <span>Use automated scraping tools</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intellectual Property -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Intellectual Property</h2>
+                    <p>
+                        The Resume Matching Engine platform and its original content, features, and functionality are 
+                        owned by us and are protected by international copyright, trademark, and other intellectual 
+                        property laws.
+                    </p>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You retain ownership of your uploaded content, but grant us a license to use it for providing 
+                        our services.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limitation of Liability -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Limitation of Liability</h2>
+                    <p>
+                        In no event shall Resume Matching Engine be liable for any indirect, incidental, special, 
+                        consequential, or punitive damages arising out of or relating to your use of the platform.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Changes to Terms -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-3">Changes to Terms</h2>
+                    <p>
+                        We reserve the right to modify these terms at any time. We will notify users of any material 
+                        changes by posting the new terms on this page and updating the "Last updated" date.
+                    </p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Your continued use of the platform after any changes constitutes acceptance of the new terms.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="text-center mt-5">
+                <p class="text-muted">
+                    If you have any questions about these Terms, please contact us at:
+                    <a href="mailto:legal@resumematchengine.com" class="text-decoration-none">
+                        legal@resumematchengine.com
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.fa-2x {
+    width: 2rem;
+    text-align: center;
+}
+
+.alert-info {
+    background-color: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary-border-subtle);
+    color: var(--bs-primary);
+}
+
+.alert-warning {
+    background-color: var(--bs-warning-bg-subtle);
+    border-color: var(--bs-warning-border-subtle);
+    color: var(--bs-warning);
+}
+
+.text-danger {
+    color: var(--bs-danger) !important;
+}
+</style>
+{% endblock %} 

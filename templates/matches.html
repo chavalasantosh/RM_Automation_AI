@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Matches - Resume Matching Engine{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-0">Matches</h1>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" onclick="refreshAllMatches()">
+                    <i class="fas fa-sync-alt me-2"></i>Refresh All
+                </button>
+                <button class="btn btn-primary" onclick="exportAllMatches()">
+                    <i class="fas fa-download me-2"></i>Export All
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="row g-3" method="GET">
+                    <div class="col-md-3">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               placeholder="Search by profile or job" value="{{ request.query_params.get('search', '') }}">
+                </div>
+                    <div class="col-md-2">
+                        <label for="score" class="form-label">Min Score</label>
+                        <select class="form-select" id="score" name="min_score">
+                            <option value="">Any Score</option>
+                            <option value="80" {% if request.query_params.get('min_score') == '80' %}selected{% endif %}>80%+</option>
+                            <option value="60" {% if request.query_params.get('min_score') == '60' %}selected{% endif %}>60%+</option>
+                            <option value="40" {% if request.query_params.get('min_score') == '40' %}selected{% endif %}>40%+</option>
+                    </select>
+                </div>
+                    <div class="col-md-2">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                        <option value="">All Status</option>
+                            <option value="matched" {% if request.query_params.get('status') == 'matched' %}selected{% endif %}>Matched</option>
+                            <option value="reviewing" {% if request.query_params.get('status') == 'reviewing' %}selected{% endif %}>Reviewing</option>
+                            <option value="rejected" {% if request.query_params.get('status') == 'rejected' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </div>
+                    <div class="col-md-3">
+                        <label for="date" class="form-label">Date Range</label>
+                        <select class="form-select" id="date" name="date_range">
+                            <option value="">All Time</option>
+                            <option value="today" {% if request.query_params.get('date_range') == 'today' %}selected{% endif %}>Today</option>
+                            <option value="week" {% if request.query_params.get('date_range') == 'week' %}selected{% endif %}>This Week</option>
+                            <option value="month" {% if request.query_params.get('date_range') == 'month' %}selected{% endif %}>This Month</option>
+                        </select>
+                </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i>Filter
+                            </button>
+                    </div>
+                </form>
+            </div>
+                </div>
+        </div>
+    </div>
+
+<!-- Matches List -->
+    <div class="row">
+    {% if matches %}
+        <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+            <div class="table-responsive">
+                    <table class="table table-hover">
+                    <thead>
+                        <tr>
+                                <th>Profile</th>
+                                <th>Job</th>
+                                <th>Score</th>
+                            <th>Skills Match</th>
+                            <th>Status</th>
+                                <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {% for match in matches %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-file-alt me-2 text-primary"></i>
+                                        <div>
+                                            <div class="fw-medium">{{ match.profile.filename }}</div>
+                                            <small class="text-muted">
+                                                {{ match.profile.created_at.strftime('%Y-%m-%d') }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-briefcase me-2 text-secondary"></i>
+                                        <div>
+                                            <div class="fw-medium">{{ match.job.title }}</div>
+                                            <small class="text-muted">{{ match.job.department }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                                            <div class="progress-bar bg-{{ 'success' if match.score >= 80 else 'warning' if match.score >= 60 else 'danger' }}"
+                                                 role="progressbar" style="width: {{ match.score }}%">
+                                            </div>
+                                        </div>
+                                        <span class="fw-medium">{{ match.score }}%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="skills-tags">
+                                        {% for skill in match.matched_skills %}
+                                        <span class="badge bg-success me-1 mb-1">{{ skill }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if match.status == 'matched' else 'warning' if match.status == 'reviewing' else 'secondary' }}">
+                                        {{ match.status|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ match.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="/matches/{{ match.id }}">
+                                                    <i class="fas fa-eye me-2"></i>View Details
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/matches/{{ match.id }}/edit">
+                                                    <i class="fas fa-edit me-2"></i>Update Status
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <button class="dropdown-item text-danger" onclick="deleteMatch('{{ match.id }}')">
+                                                    <i class="fas fa-trash-alt me-2"></i>Delete
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-handshake fa-3x text-muted mb-3"></i>
+                <h4>No Matches Found</h4>
+                <p class="text-muted mb-4">Upload resumes and create jobs to find matches</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/upload" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Resumes
+                    </a>
+                    <a href="/jobs/new" class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-2"></i>Add Job
+                    </a>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function refreshAllMatches() {
+    if (!confirm('Are you sure you want to refresh all matches? This may take a while.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/matches/refresh-all', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            throw new Error('Failed to refresh matches');
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function exportAllMatches() {
+    try {
+        const response = await fetch('/api/matches/export-all', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+            a.download = 'all-matches.csv';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+            a.remove();
+        } else {
+            throw new Error('Failed to export matches');
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function deleteMatch(matchId) {
+    if (!confirm('Are you sure you want to delete this match?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/matches/${matchId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (response.ok) {
+            window.location.reload();
+        } else {
+            throw new Error('Failed to delete match');
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+</script>
+{% endblock %} 

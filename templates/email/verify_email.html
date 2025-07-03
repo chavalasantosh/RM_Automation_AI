@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email - Resume Matching Engine</title>
+    <style>
+        /* Reset styles */
+        body, p, h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Email wrapper */
+        .email-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background-color: #0d6efd;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .welcome-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .verification-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        /* Button */
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #0d6efd;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .button:hover {
+            background-color: #0b5ed7;
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 30px 0;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #6c757d;
+            text-decoration: none;
+        }
+        
+        /* Security notice */
+        .security-notice {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Expiry notice */
+        .expiry-notice {
+            font-size: 14px;
+            color: #dc3545;
+            margin-top: 20px;
+        }
+        
+        /* Responsive design */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 30px 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .welcome-text {
+                font-size: 16px;
+            }
+            
+            .verification-text {
+                font-size: 14px;
+            }
+            
+            .button {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-wrapper">
+            <!-- Header -->
+            <div class="header">
+                <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+                <h1>Verify Your Email Address</h1>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <p class="welcome-text">Hello {{ user.first_name }},</p>
+                
+                <p class="verification-text">
+                    Thank you for signing up for Resume Matching Engine. To complete your registration and start using our platform, 
+                    please verify your email address by clicking the button below:
+                </p>
+                
+                <a href="{{ verification_url }}" class="button">Verify Email Address</a>
+                
+                <p class="verification-text">
+                    If the button above doesn't work, you can also copy and paste the following link into your browser:
+                </p>
+                
+                <p style="word-break: break-all; font-size: 14px; color: #666;">
+                    {{ verification_url }}
+                </p>
+                
+                <div class="security-notice">
+                    <strong>Security Notice:</strong> This verification link will expire in 24 hours. 
+                    If you did not create an account with Resume Matching Engine, please ignore this email.
+                </div>
+                
+                <p class="expiry-notice">
+                    This link will expire on {{ expiry_date }} at {{ expiry_time }} UTC.
+                </p>
+            </div>
+            
+            <!-- Divider -->
+            <div class="divider"></div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>Need help? Contact our support team at <a href="mailto:support@resumematcher.com">support@resumematcher.com</a></p>
+                
+                <div class="social-links">
+                    <a href="https://twitter.com/resumematcher">Twitter</a>
+                    <a href="https://linkedin.com/company/resumematcher">LinkedIn</a>
+                    <a href="https://facebook.com/resumematcher">Facebook</a>
+                </div>
+                
+                <p>
+                    © {{ current_year }} Resume Matching Engine. All rights reserved.<br>
+                    <small>
+                        This email was sent to {{ user.email }}. 
+                        If you prefer not to receive emails from Resume Matching Engine, 
+                        you can <a href="{{ unsubscribe_url }}">unsubscribe</a>.
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

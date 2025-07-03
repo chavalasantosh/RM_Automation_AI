@@ -1,0 +1,19 @@
+Name: Rahul Sharma
+Experience: 3 years
+Skills:
+- Python
+- Machine Learning
+- Data Analysis
+- Scikit-learn
+- Pandas
+- SQL
+- Data Visualization
+- Tableau
+- Git
+- Basic AWS
+
+Certifications:
+- Data Science Certification
+- SQL Expert Certification
+
+Bio: Data Scientist with 3 years of experience in building machine learning models and data analysis. Strong background in statistical analysis and data visualization. Experience with SQL databases and data pipeline development. Currently working on predictive analytics projects. 

@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Resume Matching Engine{% endblock %}
+
+{% block body_class %}error-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-primary);
+        padding: 2rem;
+    }
+
+    .error-container {
+        text-align: center;
+        max-width: 600px;
+        padding: 3rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        box-shadow: var(--glass-shadow);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .error-code {
+        font-size: 8rem;
+        font-weight: 700;
+        background: var(--error-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+
+    .error-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+    }
+
+    .error-message {
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .error-details {
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        text-align: left;
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        max-height: 150px;
+        overflow-y: auto;
+    }
+
+    .error-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .error-button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .error-button.primary {
+        background: var(--error-gradient);
+        color: white;
+        border: none;
+    }
+
+    .error-button.secondary {
+        background: transparent;
+        border: 2px solid var(--error-color);
+        color: var(--error-color);
+    }
+
+    .error-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+    }
+
+    .error-button.secondary:hover {
+        background: var(--error-color);
+        color: white;
+    }
+
+    .error-illustration {
+        max-width: 300px;
+        margin: 0 auto 2rem;
+        animation: shake 6s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0) rotate(0); }
+        25% { transform: translateX(-5px) rotate(-2deg); }
+        75% { transform: translateX(5px) rotate(2deg); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .error-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: var(--error-color);
+        color: white;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .error-code {
+            font-size: 6rem;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+        }
+
+        .error-actions {
+            flex-direction: column;
+        }
+
+        .error-button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .error-icon {
+        animation: bounce 2s infinite;
+    }
+
+    .quick-link-card {
+        transition: all 0.2s;
+        border: 1px solid var(--bs-border-color);
+    }
+
+    .quick-link-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        border-color: var(--bs-primary);
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-20px);
+        }
+        60% {
+            transform: translateY(-10px);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="error-icon mb-4">
+                <i class="fas fa-exclamation-triangle fa-4x text-warning"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-4">Oops! Something went wrong</h1>
+            <p class="lead text-muted mb-5">
+                We're sorry, but something went wrong on our end. 
+                Our team has been notified and is working to fix the issue.
+            </p>
+            
+            <div class="d-flex justify-content-center gap-3 mb-5">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>Go Home
+                </a>
+                <button onclick="window.location.reload()" class="btn btn-outline-primary">
+                    <i class="fas fa-sync-alt me-2"></i>Try Again
+                </button>
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Go Back
+                </a>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="h5 mb-4">Quick Links</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <a href="/dashboard" class="text-decoration-none">
+                                <div class="quick-link-card p-3 text-center rounded">
+                                    <i class="fas fa-tachometer-alt fa-2x mb-2 text-primary"></i>
+                                    <h3 class="h6 mb-0">Dashboard</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/upload" class="text-decoration-none">
+                                <div class="quick-link-card p-3 text-center rounded">
+                                    <i class="fas fa-upload fa-2x mb-2 text-primary"></i>
+                                    <h3 class="h6 mb-0">Upload Resumes</h3>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/jobs" class="text-decoration-none">
+                                <div class="quick-link-card p-3 text-center rounded">
+                                    <i class="fas fa-briefcase fa-2x mb-2 text-primary"></i>
+                                    <h3 class="h6 mb-0">View Jobs</h3>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if error_id %}
+            <div class="mt-4 text-muted">
+                <small>Error ID: {{ error_id }}</small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Add any 500 error page JS here
+    } catch (err) {
+        console.error('Error on 500 page:', err);
+    }
+});
+</script>
+{% endblock %} 

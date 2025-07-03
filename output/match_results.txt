@@ -1,0 +1,109 @@
+RESUME MATCHING ANALYSIS REPORT
+Generated on: 2025-06-10 17:04:25
+================================================================================
+
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Total Matches Analyzed: 2
+Perfect Matches (>80%): 2
+Average Match Score: 93.5%
+
+
+CANDIDATE PROFILE ANALYSIS: John Smith
+================================================================================
+
+PROFILE OVERVIEW
+----------------------------------------
+Total Skills: 13
+Matching Skills: 10
+Years of Experience: 7
+Certifications: 3
+Education Level: Master's in Computer Science
+
+KEY STRENGTHS
+----------------------------------------
+• Strong alignment with required skills
+• Meets or exceeds experience requirements
+• Has relevant certifications
+
+AREAS FOR DEVELOPMENT
+----------------------------------------
+
+SKILLS ANALYSIS
+----------------------------------------
+Core Matching Skills:
+• Python
+• JavaScript
+• React
+• Node.js
+• SQL
+• Git
+• Docker
+• AWS
+• CI/CD
+• System Design
+
+Additional Valuable Skills:
+• TypeScript
+• MongoDB
+• Kubernetes
+
+MATCH DETAILS
+----------------------------------------
+Overall Match Score: 100.0%
+Experience Match: 100.0%
+Certification Match: 100.0%
+
+================================================================================
+
+CANDIDATE PROFILE ANALYSIS: Sarah Johnson
+================================================================================
+
+PROFILE OVERVIEW
+----------------------------------------
+Total Skills: 13
+Matching Skills: 8
+Years of Experience: 4
+Certifications: 1
+Education Level: Bachelor's in Computer Science
+
+KEY STRENGTHS
+----------------------------------------
+• Strong alignment with required skills
+• Has relevant certifications
+
+AREAS FOR DEVELOPMENT
+----------------------------------------
+• Missing key skills: CI/CD, System Design
+• Below required experience level
+
+SKILLS ANALYSIS
+----------------------------------------
+Core Matching Skills:
+• Python
+• JavaScript
+• React
+• Node.js
+• SQL
+• Git
+• Docker
+• AWS
+
+Missing Required Skills:
+• CI/CD
+• System Design
+
+Additional Valuable Skills:
+• TypeScript
+• MongoDB
+• GraphQL
+• Redux
+• Jest
+
+MATCH DETAILS
+----------------------------------------
+Overall Match Score: 87.0%
+Experience Match: 100.0%
+Certification Match: 50.0%
+
+================================================================================

@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Resume Matching Engine{% endblock %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ol>
+        </nav>
+    </div>
+    </div>
+
+    <div class="row">
+    <!-- Profile Information -->
+        <div class="col-md-4">
+        <div class="card mb-4">
+                <div class="card-body text-center">
+                <div class="mb-4">
+                    <div class="avatar-circle mx-auto mb-3">
+                        <i class="fas fa-user fa-2x"></i>
+                    </div>
+                    <h4 class="mb-1">{{ user.username }}</h4>
+                    <p class="text-muted mb-0">{{ user.email }}</p>
+                </div>
+                <hr>
+                <div class="text-start">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Role</label>
+                        <div class="fw-medium">{{ user.role|title }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Member Since</label>
+                        <div>{{ user.created_at.strftime('%Y-%m-%d') }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Last Login</label>
+                        <div>{{ user.last_login.strftime('%Y-%m-%d %H:%M') if user.last_login else 'Never' }}</div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+        <div class="card">
+                <div class="card-body">
+                <h5 class="card-title mb-4">Quick Stats</h5>
+                    <div class="row g-3">
+                        <div class="col-6">
+                        <div class="border rounded p-3 text-center">
+                            <div class="h3 mb-1">{{ stats.total_profiles }}</div>
+                            <div class="text-muted small">Profiles</div>
+                        </div>
+                        </div>
+                        <div class="col-6">
+                        <div class="border rounded p-3 text-center">
+                            <div class="h3 mb-1">{{ stats.total_matches }}</div>
+                            <div class="text-muted small">Matches</div>
+                        </div>
+                        </div>
+                        <div class="col-6">
+                        <div class="border rounded p-3 text-center">
+                            <div class="h3 mb-1">{{ stats.active_jobs }}</div>
+                            <div class="text-muted small">Active Jobs</div>
+                        </div>
+                        </div>
+                        <div class="col-6">
+                        <div class="border rounded p-3 text-center">
+                            <div class="h3 mb-1">{{ stats.match_rate }}%</div>
+                            <div class="text-muted small">Match Rate</div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Settings -->
+        <div class="col-md-8">
+        <div class="card">
+                <div class="card-body">
+                <ul class="nav nav-tabs mb-4" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#account" type="button">
+                            <i class="fas fa-user-cog me-2"></i>Account
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#security" type="button">
+                            <i class="fas fa-shield-alt me-2"></i>Security
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notifications" type="button">
+                            <i class="fas fa-bell me-2"></i>Notifications
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <!-- Account Settings -->
+                    <div class="tab-pane fade show active" id="account">
+                        <form id="accountForm" onsubmit="updateAccount(event)">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       value="{{ user.username }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="{{ user.email }}" required>
+                        </div>
+                        <div class="mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" name="full_name" 
+                                       value="{{ user.full_name }}">
+                        </div>
+                        <div class="mb-3">
+                                <label for="department" class="form-label">Department</label>
+                            <input type="text" class="form-control" id="department" name="department"
+                                       value="{{ user.department }}">
+                        </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                    </form>
+            </div>
+
+            <!-- Security Settings -->
+                    <div class="tab-pane fade" id="security">
+                        <form id="passwordForm" onsubmit="updatePassword(event)">
+                            <div class="mb-3">
+                                <label for="currentPassword" class="form-label">Current Password</label>
+                                <div class="input-group">
+                                <input type="password" class="form-control" id="currentPassword" 
+                                           name="current_password" required>
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="togglePassword('currentPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <div class="input-group">
+                                <input type="password" class="form-control" id="newPassword" 
+                                           name="new_password" required>
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="togglePassword('newPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                <div class="input-group">
+                                <input type="password" class="form-control" id="confirmPassword" 
+                                           name="confirm_password" required>
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            onclick="togglePassword('confirmPassword')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-key me-2"></i>Update Password
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div class="tab-pane fade" id="notifications">
+                        <form id="notificationForm" onsubmit="updateNotifications(event)">
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="emailNotifications" 
+                                           name="email_notifications" {% if user.email_notifications %}checked{% endif %}>
+                                    <label class="form-check-label" for="emailNotifications">
+                                        Email Notifications
+                                    </label>
+                                </div>
+                                <small class="text-muted">Receive email notifications for new matches and updates</small>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="matchAlerts" 
+                                           name="match_alerts" {% if user.match_alerts %}checked{% endif %}>
+                                    <label class="form-check-label" for="matchAlerts">
+                                        Match Alerts
+                                    </label>
+                        </div>
+                                <small class="text-muted">Get notified when new matches are found for your jobs</small>
+                    </div>
+                        <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="jobUpdates" 
+                                           name="job_updates" {% if user.job_updates %}checked{% endif %}>
+                                    <label class="form-check-label" for="jobUpdates">
+                                        Job Updates
+                                    </label>
+                                </div>
+                                <small class="text-muted">Receive notifications about changes to your job postings</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Preferences
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    background-color: var(--bs-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+async function updateAccount(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    try {
+        const response = await fetch('/api/users/me', {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(Object.fromEntries(formData))
+        });
+        
+        if (response.ok) {
+            alert('Account updated successfully');
+            window.location.reload();
+        } else {
+            throw new Error('Failed to update account');
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function updatePassword(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    if (formData.get('new_password') !== formData.get('confirm_password')) {
+        alert('New passwords do not match');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/users/me/password', {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                current_password: formData.get('current_password'),
+                new_password: formData.get('new_password')
+            })
+        });
+        
+        if (response.ok) {
+            alert('Password updated successfully');
+            form.reset();
+        } else {
+            throw new Error('Failed to update password');
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function updateNotifications(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    try {
+        const response = await fetch('/api/users/me/notifications', {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email_notifications: formData.get('email_notifications') === 'on',
+                match_alerts: formData.get('match_alerts') === 'on',
+                job_updates: formData.get('job_updates') === 'on'
+            })
+        });
+        
+        if (response.ok) {
+            alert('Notification preferences updated successfully');
+        } else {
+            throw new Error('Failed to update notification preferences');
+        }
+    } catch (error) {
+        alert(error.message);
+    }
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,51 @@
+{
+    "name": "John Smith",
+    "skills": [
+        "Python",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "SQL",
+        "Git",
+        "Docker",
+        "AWS",
+        "CI/CD",
+        "System Design",
+        "TypeScript",
+        "MongoDB",
+        "Kubernetes"
+    ],
+    "years_of_experience": 7,
+    "certifications": [
+        "AWS Certified Developer",
+        "Microsoft Certified: Azure Developer Associate",
+        "Google Cloud Professional Developer"
+    ],
+    "education_level": "Master's in Computer Science",
+    "availability": "Full-time",
+    "current_role": "Senior Software Engineer",
+    "previous_roles": [
+        {
+            "title": "Software Engineer",
+            "company": "Tech Corp",
+            "duration": "3 years"
+        },
+        {
+            "title": "Junior Developer",
+            "company": "StartUp Inc",
+            "duration": "2 years"
+        }
+    ],
+    "projects": [
+        {
+            "name": "Cloud Migration Project",
+            "description": "Led the migration of legacy systems to AWS cloud infrastructure",
+            "technologies": ["AWS", "Docker", "Kubernetes", "Python"]
+        },
+        {
+            "name": "E-commerce Platform",
+            "description": "Developed and maintained a full-stack e-commerce platform",
+            "technologies": ["React", "Node.js", "MongoDB", "AWS"]
+        }
+    ]
+} 

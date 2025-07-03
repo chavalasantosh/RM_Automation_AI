@@ -1,0 +1,217 @@
+skills:
+  - name: Agile Methodologies
+    category: DEVOPS
+    level: INTERMEDIATE
+    description: Scrum, Kanban, SAFe
+    tags: [popular, emerging]
+    aliases: [Agile, Scrum]
+  - name: AI/ML Engineering
+    category: ML_FRAMEWORKS
+    level: ADVANCED
+    description: Model Deployment, TensorFlow, PyTorch
+    tags: [emerging, high-demand]
+    aliases: [AI Engineering, ML Engineering]
+  - name: Automation Frameworks
+    category: DEVOPS
+    level: INTERMEDIATE
+    description: Ansible, Chef, Puppet
+    tags: [popular]
+    aliases: [Automation, IaC]
+  - name: API Management
+    category: DEVOPS
+    level: INTERMEDIATE
+    description: Apigee, Kong, WSO2
+    tags: [popular]
+    aliases: [API Gateway, API Integration]
+  - name: Application Security
+    category: DEVOPS
+    level: ADVANCED
+    description: OWASP, SAST/DAST
+    tags: [high-demand, security]
+    aliases: [AppSec, Security Testing]
+  - name: Business Intelligence (BI)
+    category: DATA_SCIENCE
+    level: INTERMEDIATE
+    description: Power BI, Tableau, QlikView
+    tags: [popular, data]
+    aliases: [BI, Data Visualization]
+  - name: Blockchain Development
+    category: SPECIALIZED
+    level: ADVANCED
+    description: Ethereum, Hyperledger, Smart Contracts
+    tags: [emerging, specialized]
+    aliases: [Blockchain, Smart Contracts]
+  - name: Cloud Platforms
+    category: CLOUD
+    level: INTERMEDIATE
+    description: AWS, Azure, Google Cloud
+    tags: [popular, high-demand]
+    aliases: [Cloud, Cloud Computing]
+  - name: Containerization
+    category: DEVOPS
+    level: INTERMEDIATE
+    description: Docker, Kubernetes, OpenShift
+    tags: [popular, emerging]
+    aliases: [Containers, Docker, K8s]
+  - name: Full-Stack Development
+    category: PROGRAMMING
+    level: ADVANCED
+    description: React, Node.js, Django
+    tags: [popular, high-demand]
+    aliases: [Full Stack, Web Development]
+  - name: Machine Learning Engineer
+    category: ML_FRAMEWORKS
+    level: ADVANCED
+    description: Machine Learning, Model Deployment
+    tags: [emerging, high-demand]
+    aliases: [ML Engineer, AI Engineer]
+  - name: DevOps Engineer
+    category: DEVOPS
+    level: ADVANCED
+    description: DevOps Practices, Automation
+    tags: [popular, high-demand]
+    aliases: [DevOps, SRE]
+  - name: Data Scientist
+    category: DATA_SCIENCE
+    level: ADVANCED
+    description: Data Analysis, Modeling
+    tags: [popular, high-demand]
+    aliases: [Data Science, Analytics]
+  - name: Cloud Architect
+    category: CLOUD
+    level: ADVANCED
+    description: Cloud Design, AWS, Azure
+    tags: [high-demand, specialized]
+    aliases: [Cloud Design, Cloud Strategy]
+  - name: Software Engineer
+    category: PROGRAMMING
+    level: ADVANCED
+    description: Software Development, Engineering
+    tags: [popular, high-demand]
+    aliases: [Developer, Programmer]
+  - name: Technical Project Manager
+    category: DEVOPS
+    level: ADVANCED
+    description: Project Management, Agile
+    tags: [popular, leadership]
+    aliases: [Project Manager, TPM]
+  - name: Python
+    category: PROGRAMMING
+    level: INTERMEDIATE
+    description: Python programming language
+    tags: [popular, programming]
+    aliases: [Py]
+  - name: Java
+    category: PROGRAMMING
+    level: INTERMEDIATE
+    description: Java programming language
+    tags: [popular, programming]
+    aliases: []
+  - name: C++
+    category: PROGRAMMING
+    level: ADVANCED
+    description: C++ programming language
+    tags: [legacy, programming]
+    aliases: [CPP]
+  - name: TensorFlow
+    category: ML_FRAMEWORKS
+    level: ADVANCED
+    description: TensorFlow ML framework
+    tags: [ml, framework]
+    aliases: []
+  - name: PyTorch
+    category: ML_FRAMEWORKS
+    level: ADVANCED
+    description: PyTorch ML framework
+    tags: [ml, framework]
+    aliases: []
+  - name: Scikit-learn
+    category: ML_FRAMEWORKS
+    level: INTERMEDIATE
+    description: Scikit-learn ML framework
+    tags: [ml, framework]
+    aliases: [sklearn]
+  - name: Deep Learning
+    category: DEEP_LEARNING
+    level: ADVANCED
+    description: Deep learning techniques
+    tags: [ml, deep-learning]
+    aliases: []
+  - name: Computer Vision
+    category: DEEP_LEARNING
+    level: ADVANCED
+    description: Computer vision techniques
+    tags: [ml, vision]
+    aliases: []
+  - name: Natural Language Processing
+    category: DEEP_LEARNING
+    level: ADVANCED
+    description: NLP techniques
+    tags: [ml, nlp]
+    aliases: [NLP]
+  - name: Data Analysis
+    category: DATA_SCIENCE
+    level: INTERMEDIATE
+    description: Data analysis skills
+    tags: [data, analysis]
+    aliases: []
+  - name: SQL
+    category: DATA_SCIENCE
+    level: INTERMEDIATE
+    description: SQL language
+    tags: [data, database]
+    aliases: []
+  - name: Data Visualization
+    category: DATA_SCIENCE
+    level: INTERMEDIATE
+    description: Data visualization skills
+    tags: [data, visualization]
+    aliases: []
+  - name: AWS
+    category: CLOUD
+    level: INTERMEDIATE
+    description: Amazon Web Services
+    tags: [cloud, aws]
+    aliases: [Amazon Web Services]
+  - name: Google Cloud
+    category: CLOUD
+    level: INTERMEDIATE
+    description: Google Cloud Platform
+    tags: [cloud, gcp]
+    aliases: [GCP]
+  - name: Azure
+    category: CLOUD
+    level: INTERMEDIATE
+    description: Microsoft Azure
+    tags: [cloud, azure]
+    aliases: [MS Azure]
+  - name: Docker
+    category: DEVOPS
+    level: INTERMEDIATE
+    description: Docker containerization
+    tags: [devops, container]
+    aliases: []
+  - name: Kubernetes
+    category: DEVOPS
+    level: ADVANCED
+    description: Kubernetes orchestration
+    tags: [devops, orchestration]
+    aliases: [K8s]
+  - name: Git
+    category: DEVOPS
+    level: INTERMEDIATE
+    description: Git version control
+    tags: [devops, vcs]
+    aliases: []
+  - name: MLOps
+    category: SPECIALIZED
+    level: ADVANCED
+    description: Machine Learning Operations
+    tags: [ml, ops]
+    aliases: []
+  - name: CUDA
+    category: SPECIALIZED
+    level: ADVANCED
+    description: CUDA parallel computing
+    tags: [gpu, parallel]
+    aliases: [] 

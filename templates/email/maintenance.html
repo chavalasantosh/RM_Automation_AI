@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Maintenance Notice - Resume Matching Engine</title>
+    <style>
+        /* Reset styles */
+        body, p, h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Email wrapper */
+        .email-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background-color: #ffc107;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #856404;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 40px 20px;
+        }
+        
+        .notification-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Maintenance info */
+        .maintenance-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .maintenance-info h3 {
+            color: #856404;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .maintenance-details {
+            margin: 20px 0;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ffeeba;
+        }
+        
+        .detail-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            flex: 1;
+            color: #856404;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            flex: 2;
+            color: #333;
+        }
+        
+        /* Impact section */
+        .impact-section {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .impact-section h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .impact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .impact-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .impact-item:before {
+            content: '⚠️';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        /* Timeline */
+        .timeline {
+            margin: 30px 0;
+            padding-left: 20px;
+            border-left: 2px solid #ffc107;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 30px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #ffc107;
+        }
+        
+        .timeline-time {
+            color: #856404;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        /* Preparation steps */
+        .preparation-steps {
+            background-color: #e7f5ff;
+            border: 1px solid #b8daff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .preparation-steps h3 {
+            color: #004085;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .step-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .step-item:before {
+            content: '📝';
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        /* Button */
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #ffc107;
+            color: #856404;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .button:hover {
+            background-color: #e0a800;
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 30px 0;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+        }
+        
+        /* Status badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status-scheduled {
+            background-color: #ffc107;
+            color: #856404;
+        }
+        
+        .status-in-progress {
+            background-color: #17a2b8;
+            color: #ffffff;
+        }
+        
+        .status-completed {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+        
+        /* Responsive design */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .content {
+                padding: 30px 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .notification-text {
+                font-size: 16px;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+            }
+            
+            .detail-label {
+                margin-bottom: 5px;
+            }
+            
+            .button {
+                display: block;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="email-wrapper">
+            <!-- Header -->
+            <div class="header">
+                <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+                <h1>
+                    System Maintenance Notice
+                    <span class="status-badge status-scheduled">Scheduled</span>
+                </h1>
+            </div>
+            
+            <!-- Content -->
+            <div class="content">
+                <p class="notification-text">
+                    Hello {{ user.first_name }},<br>
+                    We're performing scheduled maintenance to improve our services.
+                </p>
+                
+                <!-- Maintenance Information -->
+                <div class="maintenance-info">
+                    <h3>Maintenance Details</h3>
+                    
+                    <div class="maintenance-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Date</div>
+                            <div class="detail-value">{{ maintenance_date }}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">Start Time</div>
+                            <div class="detail-value">{{ start_time }} UTC</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">End Time</div>
+                            <div class="detail-value">{{ end_time }} UTC</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">Duration</div>
+                            <div class="detail-value">{{ duration }}</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">Type</div>
+                            <div class="detail-value">{{ maintenance_type }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Impact Section -->
+                <div class="impact-section">
+                    <h3>Expected Impact</h3>
+                    
+                    <ul class="impact-list">
+                        <li class="impact-item">
+                            The platform will be unavailable during the maintenance window
+                        </li>
+                        <li class="impact-item">
+                            Any ongoing matching processes will be paused and resumed after maintenance
+                        </li>
+                        <li class="impact-item">
+                            Scheduled notifications will be delayed until the system is back online
+                        </li>
+                        <li class="impact-item">
+                            API services will be temporarily unavailable
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">{{ start_time }} UTC</div>
+                        <p>Maintenance begins - System becomes unavailable</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-time">{{ mid_time }} UTC</div>
+                        <p>Core system updates and optimizations</p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-time">{{ end_time }} UTC</div>
+                        <p>Maintenance completed - System back online</p>
+                    </div>
+                </div>
+                
+                <!-- Preparation Steps -->
+                <div class="preparation-steps">
+                    <h3>Recommended Actions</h3>
+                    
+                    <div class="step-item">
+                        <strong>Save Your Work</strong>
+                        <p>Ensure all your current work is saved before the maintenance window</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <strong>Plan Ahead</strong>
+                        <p>Schedule any critical matching tasks outside the maintenance window</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <strong>Download Reports</strong>
+                        <p>Download any needed reports before the maintenance begins</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <strong>Update API Integrations</strong>
+                        <p>If you're using our API, prepare for the temporary unavailability</p>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{{ status_page_url }}" class="button">View Status Page</a>
+                </div>
+                
+                <!-- Additional Information -->
+                <div class="impact-section">
+                    <h3>Need Help?</h3>
+                    <p>
+                        For any questions about the maintenance or assistance with preparation, 
+                        please contact our support team at 
+                        <a href="mailto:support@resumematcher.com">support@resumematcher.com</a> 
+                        or call us at +1 (555) 123-4567.
+                    </p>
+                    <p style="margin-top: 15px;">
+                        We apologize for any inconvenience and thank you for your understanding 
+                        as we work to improve our services.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="divider"></div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>
+                    © {{ current_year }} Resume Matching Engine. All rights reserved.<br>
+                    <small>
+                        This email was sent to {{ user.email }}. 
+                        To manage your notification preferences, 
+                        <a href="{{ preferences_url }}">click here</a>.
+                    </small>
+                </p>
+                
+                <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                    To ensure delivery to your inbox, please add <strong>noreply@resumematcher.com</strong> to your address book.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

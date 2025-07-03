@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Documents - Resume Matching Engine{% endblock %}
+
+{% block extra_css %}
+<style>
+    .upload-zone {
+        border: 2px dashed var(--secondary-color);
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        background-color: rgba(52, 152, 219, 0.05);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .upload-zone:hover, .upload-zone.dragover {
+        background-color: rgba(52, 152, 219, 0.1);
+        border-color: var(--primary-color);
+    }
+    
+    .upload-zone i {
+        font-size: 3rem;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .file-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .file-item {
+        background-color: white;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .file-icon {
+        font-size: 1.5rem;
+        color: var(--secondary-color);
+    }
+    
+    .file-info {
+        flex: 1;
+    }
+    
+    .file-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+    
+    .file-size {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    
+    .file-status {
+        font-size: 0.875rem;
+    }
+    
+    .progress {
+        height: 0.5rem;
+        margin-top: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title mb-4">Upload Documents</h1>
+                
+                <!-- Upload Zone -->
+                <div class="upload-zone mb-4" id="uploadZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>Drag & Drop Files Here</h4>
+                    <p class="text-muted mb-3">or</p>
+                    <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt" class="d-none">
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-folder-open me-2"></i>Browse Files
+                    </button>
+                    <p class="text-muted mt-3 mb-0">
+                        <small>Supported formats: PDF, DOC, DOCX, TXT (Max size: 10MB)</small>
+                    </p>
+                </div>
+
+                <!-- File List -->
+                <div class="file-list" id="fileList">
+                    <!-- Files will be added here dynamically -->
+                </div>
+
+                <!-- Upload Button -->
+                <div class="text-end mt-4">
+                    <button class="btn btn-primary" id="uploadButton" disabled>
+                        <i class="fas fa-upload me-2"></i>Upload Files
+                    </button>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+
+<!-- Upload Progress Modal -->
+<div class="modal fade" id="uploadProgressModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Uploading Files</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+            <div class="modal-body">
+                <div id="uploadProgressList">
+                    <!-- Progress items will be added here -->
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// File handling
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+const uploadButton = document.getElementById('uploadButton');
+const uploadProgressModal = new bootstrap.Modal(document.getElementById('uploadProgressModal'));
+const uploadProgressList = document.getElementById('uploadProgressList');
+
+let files = new Map();
+
+// Drag and drop handlers
+uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+});
+
+uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('dragover');
+});
+
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+});
+
+function handleFiles(fileList) {
+    Array.from(fileList).forEach(file => {
+        if (isValidFile(file)) {
+            files.set(file.name, file);
+            addFileToList(file);
+        } else {
+            showError(`Invalid file: ${file.name}`);
+        }
+    });
+    updateUploadButton();
+}
+
+function isValidFile(file) {
+    const validTypes = ['application/pdf', 'application/msword', 
+                       'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+                       'text/plain'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    
+    return validTypes.includes(file.type) && file.size <= maxSize;
+}
+
+function addFileToList(file) {
+    const fileItem = document.createElement('div');
+    fileItem.className = 'file-item';
+    fileItem.innerHTML = `
+        <i class="fas ${getFileIcon(file.type)} file-icon"></i>
+        <div class="file-info">
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${formatFileSize(file.size)}</div>
+        </div>
+        <button class="btn btn-sm btn-outline-danger" onclick="removeFile('${file.name}')">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    fileList.appendChild(fileItem);
+}
+
+function removeFile(fileName) {
+    files.delete(fileName);
+    const fileItem = Array.from(fileList.children).find(item => 
+        item.querySelector('.file-name').textContent === fileName);
+    if (fileItem) {
+        fileItem.remove();
+    }
+    updateUploadButton();
+}
+
+function updateUploadButton() {
+    uploadButton.disabled = files.size === 0;
+}
+
+function getFileIcon(mimeType) {
+    switch (mimeType) {
+        case 'application/pdf':
+            return 'fa-file-pdf';
+        case 'application/msword':
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            return 'fa-file-word';
+        case 'text/plain':
+            return 'fa-file-alt';
+        default:
+            return 'fa-file';
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function showError(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger alert-dismissible fade show';
+    alert.innerHTML = `
+        <i class="fas fa-exclamation-circle me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.querySelector('.card-body').insertBefore(alert, uploadZone);
+}
+
+// Upload handling
+uploadButton.addEventListener('click', async () => {
+    if (files.size === 0) return;
+    
+    uploadProgressModal.show();
+    uploadProgressList.innerHTML = '';
+    
+    for (const [fileName, file] of files) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const progressItem = document.createElement('div');
+        progressItem.className = 'mb-3';
+        progressItem.innerHTML = `
+            <div class="d-flex justify-content-between mb-1">
+                <span>${fileName}</span>
+                <span class="file-status">Uploading...</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+            </div>
+        `;
+        uploadProgressList.appendChild(progressItem);
+        
+        try {
+            const response = await fetch('/api/upload-resume', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                progressItem.querySelector('.progress-bar').style.width = '100%';
+                progressItem.querySelector('.progress-bar').classList.add('bg-success');
+                progressItem.querySelector('.file-status').textContent = 'Uploaded';
+                files.delete(fileName);
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || `Upload failed: ${response.statusText}`);
+            }
+        } catch (error) {
+            progressItem.querySelector('.progress-bar').classList.add('bg-danger');
+            progressItem.querySelector('.file-status').textContent = 'Failed';
+            showError(`Failed to upload ${fileName}: ${error.message}`);
+        }
+    }
+    
+    updateUploadButton();
+    setTimeout(() => {
+        uploadProgressModal.hide();
+        if (files.size === 0) {
+            window.location.reload();
+        }
+    }, 2000);
+});
+</script>
+{% endblock %} 

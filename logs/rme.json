@@ -1,0 +1,2 @@
+{"asctime": "2025-06-12 12:50:02,999", "levelname": "DEBUG", "name": "asyncio", "message": "Using proactor: IocpProactor"}
+{"asctime": "2025-06-12 12:53:08,496", "levelname": "DEBUG", "name": "asyncio", "message": "Using proactor: IocpProactor"}

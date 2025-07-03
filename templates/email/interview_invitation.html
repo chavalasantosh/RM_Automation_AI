@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Invitation – Resume Matching Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .email-wrapper { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: #fd7e14; color: #fff; text-align: center; padding: 30px 20px; }
+        .logo { max-width: 150px; margin-bottom: 20px; }
+        .header h1 { font-size: 24px; margin-bottom: 10px; }
+        .content { padding: 40px 20px; }
+        .invite-box { background: #e7f5ff; border: 1px solid #b8daff; color: #007bff; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .invite-title { font-size: 20px; color: #fd7e14; margin-bottom: 10px; }
+        .invite-date { font-size: 14px; color: #6c757d; margin-bottom: 20px; }
+        .invite-body { font-size: 16px; color: #333; margin-bottom: 20px; }
+        .interview-details { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .interview-details h3 { color: #fd7e14; font-size: 18px; margin-bottom: 10px; }
+        .interview-info { font-size: 14px; color: #333; margin-bottom: 5px; }
+        .job-details { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .job-details h3 { color: #fd7e14; font-size: 18px; margin-bottom: 10px; }
+        .job-info { font-size: 14px; color: #333; margin-bottom: 5px; }
+        .cta-section { text-align: center; margin: 30px 0; }
+        .button { display: inline-block; padding: 12px 30px; background: #fd7e14; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin: 10px 0; text-align: center; }
+        .button:hover { background: #e66a00; }
+        .footer { padding: 20px; text-align: center; font-size: 14px; color: #6c757d; }
+        .footer p { margin-bottom: 10px; }
+        @media only screen and (max-width: 600px) { .container { padding: 10px; } .content { padding: 30px 10px; } .header { padding: 20px 10px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+  <div class="email-wrapper">
+    <div class="header">
+      <img src="{{ url_for('static', filename='images/logo.png', _external=True) }}" alt="Resume Matching Engine" class="logo">
+      <h1>Interview Invitation</h1>
+    </div>
+    <div class="content">
+      <div class="invite-box">
+        <div class="invite-title">Congratulations, {{ candidate_name }}!</div>
+        <div class="invite-date">Invitation Sent On: {{ invite_date }}</div>
+        <div class="invite-body">{{ invite_body|safe }}</div>
+      </div>
+      <div class="interview-details">
+        <h3>Interview Details</h3>
+        <div class="interview-info"><strong>Date:</strong> {{ interview_date }}</div>
+        <div class="interview-info"><strong>Time:</strong> {{ interview_time }}</div>
+        <div class="interview-info"><strong>Location (or Link):</strong> {{ interview_location }}</div>
+        <div class="interview-info"><strong>Interviewer(s):</strong> {{ interviewers }}</div>
+      </div>
+      <div class="job-details">
+        <h3>Job Details</h3>
+        <div class="job-info"><strong>Job Title:</strong> {{ job.title }}</div>
+        <div class="job-info"><strong>Location:</strong> {{ job.location }}</div>
+        <div class="job-info"><strong>Posted On:</strong> {{ job.posted_date }}</div>
+      </div>
+      {% if cta_url and cta_text %}
+      <div class="cta-section">
+        <a href="{{ cta_url }}" class="button">{{ cta_text }}</a>
+      </div>
+      {% endif %}
+    </div>
+    <div class="footer">
+      <p>For questions or help, contact <a href="mailto:support@resumematcher.com">support@resumematcher.com</a></p>
+      <p>© {{ current_year }} Resume Matching Engine. All rights reserved.<br><small>This email was sent to {{ candidate_email }}. To manage your notification preferences, <a href="{{ preferences_url }}">click here</a>.</small></p>
+    </div>
+  </div>
+</div>
+</body>
+</html> 

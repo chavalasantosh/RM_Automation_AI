@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Management - RME Enterprise AI Platform{% endblock %}
+
+{% block body_class %}resumes-page{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="mb-2">Resume Management</h1>
+                    <p class="text-secondary mb-0">Upload, manage, and analyze candidate resumes</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadResumeModal">
+                        <i class="mdi mdi-upload me-2"></i>Upload Resume
+                    </button>
+                    <button class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#batchUploadModal">
+                        <i class="mdi mdi-file-multiple me-2"></i>Batch Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="resumeFilters" class="row g-3">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0">
+                                    <i class="mdi mdi-magnify"></i>
+                                </span>
+                                <input type="text" class="form-control border-start-0" placeholder="Search resumes...">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" name="status">
+                                <option value="">All Status</option>
+                                <option value="new">New</option>
+                                <option value="processed">Processed</option>
+                                <option value="matched">Matched</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" name="dateRange">
+                                <option value="">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" name="sortBy">
+                                <option value="date">Sort by Date</option>
+                                <option value="name">Sort by Name</option>
+                                <option value="match">Sort by Match %</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resume Grid -->
+    <div class="row" id="resumeGrid">
+        <!-- Resume cards will be dynamically loaded here -->
+    </div>
+
+    <!-- Resume Card Template (Hidden) -->
+    <template id="resumeCardTemplate">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 resume-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="card-title mb-1 resume-name"></h5>
+                            <p class="text-secondary mb-0 resume-email"></p>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-link text-secondary p-0" data-bs-toggle="dropdown">
+                                <i class="mdi mdi-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" data-action="view"><i class="mdi mdi-eye me-2"></i>View</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="edit"><i class="mdi mdi-pencil me-2"></i>Edit</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="download"><i class="mdi mdi-download me-2"></i>Download</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" data-action="delete"><i class="mdi mdi-delete me-2"></i>Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="resume-preview mb-3">
+                        <div class="skills-tags"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="match-score">
+                            <div class="progress" style="height: 6px; width: 100px;">
+                                <div class="progress-bar" role="progressbar"></div>
+                            </div>
+                            <small class="text-secondary">Match Score</small>
+                        </div>
+                        <span class="badge resume-status"></span>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <small class="text-secondary resume-date"></small>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Upload Resume Modal -->
+    <div class="modal fade" id="uploadResumeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Resume</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadResumeForm">
+                        <div class="file-drop-zone mb-3">
+                            <input type="file" class="d-none" id="resumeFile" accept=".pdf,.doc,.docx">
+                            <div class="text-center p-5 border rounded">
+                                <i class="mdi mdi-upload display-4 text-primary mb-3"></i>
+                                <h5>Drag & Drop Resume</h5>
+                                <p class="text-secondary">or click to browse</p>
+                                <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('resumeFile').click()">
+                                    Select File
+                                </button>
+                            </div>
+                            <div class="progress mt-3 d-none">
+                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Candidate Name</label>
+                            <input type="text" class="form-control" name="candidateName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone (Optional)</label>
+                            <input type="tel" class="form-control" name="phone">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Notes (Optional)</label>
+                            <textarea class="form-control" name="notes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="uploadResumeForm" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Batch Upload Modal -->
+    <div class="modal fade" id="batchUploadModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Batch Upload Resumes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="batchUploadForm">
+                        <div class="file-drop-zone mb-3">
+                            <input type="file" class="d-none" id="batchFiles" multiple accept=".pdf,.doc,.docx">
+                            <div class="text-center p-5 border rounded">
+                                <i class="mdi mdi-file-multiple display-4 text-primary mb-3"></i>
+                                <h5>Drag & Drop Multiple Resumes</h5>
+                                <p class="text-secondary">or click to browse</p>
+                                <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('batchFiles').click()">
+                                    Select Files
+                                </button>
+                            </div>
+                            <div class="progress mt-3 d-none">
+                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="selected-files mb-3">
+                            <h6>Selected Files</h6>
+                            <div class="list-group" id="selectedFilesList">
+                                <!-- Selected files will be listed here -->
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Processing Options</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="extractInfo" checked>
+                                <label class="form-check-label" for="extractInfo">
+                                    Automatically extract candidate information
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="analyzeSkills" checked>
+                                <label class="form-check-label" for="analyzeSkills">
+                                    Analyze skills and experience
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="matchJobs">
+                                <label class="form-check-label" for="matchJobs">
+                                    Match against active job postings
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="batchUploadForm" class="btn btn-primary">Upload All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Initialize resumes page
+        initializeResumesPage();
+        // Load resumes data
+        loadResumesData();
+    } catch (err) {
+        console.error('Error initializing resumes page:', err);
+        showNotification('Failed to load resumes. Please try again.', 'error');
+    }
+});
+
+// Load resumes from API
+async function loadResumes(filters = {}) {
+    try {
+        const response = await API.request('/api/resumes', {
+            method: 'GET',
+            params: filters
+        });
+        
+        const grid = document.getElementById('resumeGrid');
+        const template = document.getElementById('resumeCardTemplate');
+        
+        grid.innerHTML = '';
+        
+        response.resumes.forEach(resume => {
+            const card = template.content.cloneNode(true);
+            
+            // Set resume details
+            card.querySelector('.resume-name').textContent = resume.name;
+            card.querySelector('.resume-email').textContent = resume.email;
+            card.querySelector('.resume-date').textContent = new Date(resume.uploadDate).toLocaleDateString();
+            card.querySelector('.resume-status').textContent = resume.status;
+            card.querySelector('.resume-status').classList.add(`bg-${getStatusColor(resume.status)}`);
+            
+            // Set match score
+            const progressBar = card.querySelector('.progress-bar');
+            progressBar.style.width = `${resume.matchScore}%`;
+            progressBar.setAttribute('aria-valuenow', resume.matchScore);
+            
+            // Add skills tags
+            const skillsContainer = card.querySelector('.skills-tags');
+            resume.skills.forEach(skill => {
+                const tag = document.createElement('span');
+                tag.className = 'badge bg-secondary me-1 mb-1';
+                tag.textContent = skill;
+                skillsContainer.appendChild(tag);
+            });
+            
+            // Add event listeners for actions
+            card.querySelectorAll('[data-action]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleResumeAction(button.dataset.action, resume.id);
+                });
+            });
+            
+            grid.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Failed to load resumes:', error);
+        Toast.show('Failed to load resumes', 'error');
+    }
+}
+
+// Initialize file upload handlers
+function initializeFileUploads() {
+    // Single file upload
+    const uploadZone = document.querySelector('#uploadResumeModal .file-drop-zone');
+    const uploadInput = document.getElementById('resumeFile');
+    
+    if (uploadZone && uploadInput) {
+        FileUploader.init(uploadZone, uploadInput, (file) => {
+            const form = document.getElementById('uploadResumeForm');
+            const formData = new FormData(form);
+            formData.append('file', file);
+            
+            const progressBar = uploadZone.querySelector('.progress-bar');
+            const progressContainer = uploadZone.querySelector('.progress');
+            
+            progressContainer.classList.remove('d-none');
+            progressBar.style.width = '0%';
+            
+            API.uploadFile('/api/resumes/upload', file, (progress) => {
+                progressBar.style.width = `${progress}%`;
+                progressBar.textContent = `${progress}%`;
+            }).then(response => {
+                Toast.show('Resume uploaded successfully', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('uploadResumeModal')).hide();
+                form.reset();
+                loadResumes();
+            }).catch(error => {
+                console.error('Upload failed:', error);
+            });
+        });
+    }
+    
+    // Batch upload
+    const batchZone = document.querySelector('#batchUploadModal .file-drop-zone');
+    const batchInput = document.getElementById('batchFiles');
+    
+    if (batchZone && batchInput) {
+        FileUploader.init(batchZone, batchInput, (files) => {
+            const fileList = document.getElementById('selectedFilesList');
+            fileList.innerHTML = '';
+            
+            Array.from(files).forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                item.innerHTML = `
+                    <div>
+                        <i class="mdi mdi-file-document me-2"></i>
+                        ${file.name}
+                    </div>
+                    <small class="text-secondary">${formatFileSize(file.size)}</small>
+                `;
+                fileList.appendChild(item);
+            });
+        });
+    }
+}
+
+// Initialize filters
+function initializeFilters() {
+    const form = document.getElementById('resumeFilters');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const filters = Object.fromEntries(formData.entries());
+            loadResumes(filters);
+        });
+    }
+}
+
+// Handle resume actions
+function handleResumeAction(action, resumeId) {
+    switch (action) {
+        case 'view':
+            window.location.href = `/resumes/${resumeId}`;
+            break;
+        case 'edit':
+            // TODO: Implement edit functionality
+            break;
+        case 'download':
+            window.location.href = `/api/resumes/${resumeId}/download`;
+            break;
+        case 'delete':
+            if (confirm('Are you sure you want to delete this resume?')) {
+                deleteResume(resumeId);
+            }
+            break;
+    }
+}
+
+// Delete resume
+async function deleteResume(resumeId) {
+    try {
+        await API.request(`/api/resumes/${resumeId}`, {
+            method: 'DELETE'
+        });
+        
+        Toast.show('Resume deleted successfully', 'success');
+        loadResumes();
+    } catch (error) {
+        console.error('Failed to delete resume:', error);
+        Toast.show('Failed to delete resume', 'error');
+    }
+}
+
+// Helper functions
+function getStatusColor(status) {
+    const colors = {
+        'new': 'primary',
+        'processed': 'info',
+        'matched': 'success',
+        'rejected': 'danger'
+    };
+    return colors[status.toLowerCase()] || 'secondary';
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Integrations Marketplace - RME Enterprise AI Platform{% endblock %}
+
+{% block body_class %}integrations-marketplace-page{% endblock %}
+
+{% block extra_css %}
+<style>
+.integration-card {
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+.integration-card:hover {
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.08);
+}
+.integration-card .card-header {
+    background: var(--bs-gray-100);
+    border-bottom: none;
+    padding: 1.5rem;
+}
+.integration-card .card-header img {
+    height: 40px;
+    width: auto;
+}
+.integration-card .card-body {
+    padding: 1.5rem;
+}
+.integration-card .card-footer {
+    background: var(--bs-gray-50);
+    border-top: 1px solid var(--bs-gray-200);
+    padding: 1rem 1.5rem;
+}
+.integration-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.status-connected { background: var(--bs-success-bg-subtle); color: var(--bs-success); }
+.status-disconnected { background: var(--bs-danger-bg-subtle); color: var(--bs-danger); }
+.status-pending { background: var(--bs-warning-bg-subtle); color: var(--bs-warning); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Integrations Marketplace</h1>
+        <div>
+            <input type="text" class="form-control" placeholder="Search integrations..." id="integrationSearch" style="max-width: 220px;">
+        </div>
+    </div>
+    <div class="mb-4">
+        <select class="form-select" id="filterStatus" style="max-width: 180px;">
+            <option value="">All Integrations</option>
+            <option value="connected">Connected</option>
+            <option value="disconnected">Disconnected</option>
+            <option value="pending">Pending</option>
+        </select>
+    </div>
+    <div class="row" id="integrationsList">
+        <!-- Integration cards will be loaded here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize integrations
+    initializeIntegrations();
+    
+    // Load integration status
+    loadIntegrationStatus();
+});
+
+const integrations = [
+    { id: 'slack', name: 'Slack', logo: 'https://cdn.iconscout.com/icon/free/png-256/slack-1-226460.png', description: 'Connect your RME platform with Slack for instant notifications and updates.', status: 'connected' },
+    { id: 'teams', name: 'Microsoft Teams', logo: 'https://cdn.iconscout.com/icon/free/png-256/teams-1-226461.png', description: 'Integrate with Microsoft Teams to share job matches and candidate updates.', status: 'disconnected' },
+    { id: 'zapier', name: 'Zapier', logo: 'https://cdn.iconscout.com/icon/free/png-256/zapier-1-226462.png', description: 'Automate workflows by connecting RME with Zapier.', status: 'pending' },
+    { id: 'google', name: 'Google Calendar', logo: 'https://cdn.iconscout.com/icon/free/png-256/google-calendar-1-226463.png', description: 'Sync your interview schedules with Google Calendar.', status: 'disconnected' },
+    { id: 'dropbox', name: 'Dropbox', logo: 'https://cdn.iconscout.com/icon/free/png-256/dropbox-1-226464.png', description: 'Upload and manage resume files via Dropbox.', status: 'connected' },
+    { id: 'trello', name: 'Trello', logo: 'https://cdn.iconscout.com/icon/free/png-256/trello-1-226465.png', description: 'Manage candidate pipelines and job boards with Trello.', status: 'pending' }
+];
+
+function renderIntegrations() {
+    const container = document.getElementById('integrationsList');
+    container.innerHTML = integrations.map(integration => `
+        <div class="col-md-4">
+            <div class="card integration-card">
+                <div class="card-header d-flex align-items-center">
+                    <img src="${integration.logo}" alt="${integration.name} logo" class="me-3" />
+                    <h5 class="mb-0">${integration.name}</h5>
+                </div>
+                <div class="card-body">
+                    <p>${integration.description}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <span class="integration-status status-${integration.status}">${integration.status.charAt(0).toUpperCase() + integration.status.slice(1)}</span>
+                    <button class="btn btn-outline-primary" onclick="toggleIntegration('${integration.id}')">${integration.status === 'connected' ? 'Disconnect' : (integration.status === 'pending' ? 'Pending' : 'Connect')}</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleIntegration(id) {
+    const integration = integrations.find(i => i.id === id);
+    if (integration.status === 'connected') {
+        integration.status = 'disconnected';
+    } else if (integration.status === 'disconnected') {
+         integration.status = 'pending';
+         setTimeout(() => { integration.status = 'connected'; renderIntegrations(); }, 2000);
+    }
+    renderIntegrations();
+}
+
+document.getElementById('integrationSearch').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    renderIntegrations(integrations.filter(i => i.name.toLowerCase().includes(query) || i.description.toLowerCase().includes(query)));
+});
+
+document.getElementById('filterStatus').addEventListener('change', function(e) {
+    const status = e.target.value;
+    renderIntegrations(status ? integrations.filter(i => i.status === status) : integrations);
+});
+
+// Initial render
+renderIntegrations();
+</script>
+{% endblock %} 

@@ -1,0 +1,17 @@
+{
+  "id": 1750050048,
+  "title": "Machine Learning Engineer",
+  "department": "Data Science",
+  "location": "Remote",
+  "type": "Full-time",
+  "experience_level": "Mid-Senior",
+  "required_skills": [
+    "Python",
+    "ML",
+    "Data Pipelines"
+  ],
+  "education": "B.Tech in CS or equivalent",
+  "notes": null,
+  "created_at": "2025-06-16T10:30:48.591322",
+  "status": "active"
+}

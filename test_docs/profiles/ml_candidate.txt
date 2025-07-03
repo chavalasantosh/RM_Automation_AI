@@ -1,0 +1,25 @@
+John Doe - Machine Learning Engineer
+
+Skills:
+- Python (Advanced) - 5 years
+- TensorFlow (Advanced) - 4 years
+- PyTorch (Advanced) - 3 years
+- Deep Learning (Advanced) - 4 years
+- Computer Vision (Advanced) - 3 years
+- Natural Language Processing (Advanced) - 2 years
+- MLOps (Intermediate) - 2 years
+- CUDA (Intermediate) - 2 years
+
+Experience:
+- Senior ML Engineer at Tech Corp (3 years)
+- ML Engineer at AI Solutions (2 years)
+- Research Assistant at University (2 years)
+
+Certifications:
+- AWS Machine Learning Specialty
+- Google Cloud Professional ML Engineer
+- NVIDIA Deep Learning Institute
+
+Education:
+- MS in Computer Science with focus on Machine Learning
+- BS in Computer Science 
