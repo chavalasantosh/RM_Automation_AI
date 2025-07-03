@@ -7,3 +7,13 @@
 *.log
 *.pyc
 __pycache__/
+*.safetensors
+*.bin
+*.pt
+*.zip
+*.wav
+*.pdf
+*.docx
+*.7z
+*.db
+*.safetensors
